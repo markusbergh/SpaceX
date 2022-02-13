@@ -48,4 +48,26 @@ extension Network {
             }
         }
     }
+    
+    /// Will fetch details for a launch.
+    ///
+    /// - Parameter launchID:The id of the launch to fetch details for.
+    func fetchLaunch(with launchID: GraphQLID) async throws -> GraphQLResult<LaunchDetailsQuery.Data> {
+        try await withCheckedThrowingContinuation { continuation in
+            apollo.fetch(query: LaunchDetailsQuery(launchId: launchID)) { result in
+                let errorMessage = "Something went wrong!"
+                
+                switch result {
+                case let .success(graphQLResult):
+                    guard graphQLResult.errors == nil else {
+                        return continuation.resume(throwing: NetworkError.requestError(message: errorMessage))
+                    }
+                    
+                    continuation.resume(returning: graphQLResult)
+                case .failure:
+                    continuation.resume(throwing: NetworkError.requestError(message: errorMessage))
+                }
+            }
+        }
+    }
 }

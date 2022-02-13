@@ -1,5 +1,5 @@
 //
-//  LaunchesListViewModel.swift
+//  LaunchListViewModel.swift
 //  SpaceX
 //
 //  Created by Markus Bergh on 2022-02-13.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class LaunchesListViewModel: ObservableObject {
+class LaunchListViewModel: ObservableObject {
     enum Action {
         case fetchLaunches
     }

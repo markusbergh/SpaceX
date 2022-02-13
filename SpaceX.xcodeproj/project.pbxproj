@@ -14,10 +14,13 @@
 		C0E63C2527B9AE070033B879 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = C0E63C2427B9AE070033B879 /* Apollo */; };
 		C0E63C2727B9AE070033B879 /* ApolloWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = C0E63C2627B9AE070033B879 /* ApolloWebSocket */; };
 		C0E63C2D27B9B1390033B879 /* LaunchList.graphql in Resources */ = {isa = PBXBuildFile; fileRef = C0E63C2C27B9B1390033B879 /* LaunchList.graphql */; };
-		C0E63C3027B9B2320033B879 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C2F27B9B2320033B879 /* API.swift */; };
 		C0E63C3227B9B2590033B879 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3127B9B2590033B879 /* Network.swift */; };
-		C0E63C3627B9B33B0033B879 /* LaunchesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3527B9B33B0033B879 /* LaunchesList.swift */; };
-		C0E63C3927B9B5140033B879 /* LaunchesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3827B9B5140033B879 /* LaunchesListViewModel.swift */; };
+		C0E63C3627B9B33B0033B879 /* LaunchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3527B9B33B0033B879 /* LaunchList.swift */; };
+		C0E63C3927B9B5140033B879 /* LaunchListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3827B9B5140033B879 /* LaunchListViewModel.swift */; };
+		C0E63C3B27B9C3070033B879 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3A27B9C3070033B879 /* API.swift */; };
+		C0E63C3D27B9C3870033B879 /* LaunchDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3C27B9C3870033B879 /* LaunchDetail.swift */; };
+		C0E63C3F27B9C4020033B879 /* LaunchDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C3E27B9C4020033B879 /* LaunchDetailViewModel.swift */; };
+		C0E63C4127B9C7090033B879 /* LaunchDetails.graphql in Resources */ = {isa = PBXBuildFile; fileRef = C0E63C4027B9C7090033B879 /* LaunchDetails.graphql */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,10 +31,13 @@
 		C0E63C1327B9ABD50033B879 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C0E63C2927B9B0A50033B879 /* Schema.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Schema.json; sourceTree = "<group>"; };
 		C0E63C2C27B9B1390033B879 /* LaunchList.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = LaunchList.graphql; sourceTree = "<group>"; };
-		C0E63C2F27B9B2320033B879 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = API.swift; path = SpaceX/API.swift; sourceTree = SOURCE_ROOT; };
 		C0E63C3127B9B2590033B879 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
-		C0E63C3527B9B33B0033B879 /* LaunchesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchesList.swift; sourceTree = "<group>"; };
-		C0E63C3827B9B5140033B879 /* LaunchesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchesListViewModel.swift; sourceTree = "<group>"; };
+		C0E63C3527B9B33B0033B879 /* LaunchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchList.swift; sourceTree = "<group>"; };
+		C0E63C3827B9B5140033B879 /* LaunchListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchListViewModel.swift; sourceTree = "<group>"; };
+		C0E63C3A27B9C3070033B879 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		C0E63C3C27B9C3870033B879 /* LaunchDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetail.swift; sourceTree = "<group>"; };
+		C0E63C3E27B9C4020033B879 /* LaunchDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailViewModel.swift; sourceTree = "<group>"; };
+		C0E63C4027B9C7090033B879 /* LaunchDetails.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = LaunchDetails.graphql; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +73,6 @@
 			isa = PBXGroup;
 			children = (
 				C0E63C2827B9B0A50033B879 /* GraphQL */,
-				C0E63C1B27B9AC0B0033B879 /* Service */,
 				C0E63C1A27B9AC070033B879 /* UI */,
 				C0E63C0C27B9ABD30033B879 /* SpaceXApp.swift */,
 				C0E63C1027B9ABD50033B879 /* Assets.xcassets */,
@@ -94,27 +99,12 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
-		C0E63C1B27B9AC0B0033B879 /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				C0E63C1C27B9AC110033B879 /* Query */,
-			);
-			path = Service;
-			sourceTree = "<group>";
-		};
-		C0E63C1C27B9AC110033B879 /* Query */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Query;
-			sourceTree = "<group>";
-		};
 		C0E63C2827B9B0A50033B879 /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
 				C0E63C2A27B9B0A50033B879 /* Query */,
+				C0E63C3A27B9C3070033B879 /* API.swift */,
 				C0E63C2927B9B0A50033B879 /* Schema.json */,
-				C0E63C2F27B9B2320033B879 /* API.swift */,
 				C0E63C3127B9B2590033B879 /* Network.swift */,
 			);
 			path = GraphQL;
@@ -124,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E63C2C27B9B1390033B879 /* LaunchList.graphql */,
+				C0E63C4027B9C7090033B879 /* LaunchDetails.graphql */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -131,8 +122,8 @@
 		C0E63C3327B9B3270033B879 /* List */ = {
 			isa = PBXGroup;
 			children = (
-				C0E63C3527B9B33B0033B879 /* LaunchesList.swift */,
-				C0E63C3827B9B5140033B879 /* LaunchesListViewModel.swift */,
+				C0E63C3527B9B33B0033B879 /* LaunchList.swift */,
+				C0E63C3827B9B5140033B879 /* LaunchListViewModel.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -140,6 +131,8 @@
 		C0E63C3427B9B32C0033B879 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				C0E63C3C27B9C3870033B879 /* LaunchDetail.swift */,
+				C0E63C3E27B9C4020033B879 /* LaunchDetailViewModel.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -213,6 +206,7 @@
 				C0E63C2D27B9B1390033B879 /* LaunchList.graphql in Resources */,
 				C0E63C1427B9ABD50033B879 /* Preview Assets.xcassets in Resources */,
 				C0E63C1127B9ABD50033B879 /* Assets.xcassets in Resources */,
+				C0E63C4127B9C7090033B879 /* LaunchDetails.graphql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,7 +229,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Don't run this during index builds\nif [ $ACTION = \"indexbuild\" ]; then exit 0; fi\n\n# Go to the build root and search up the chain to find the Derived Data Path where the source packages are checked out.\nDERIVED_DATA_CANDIDATE=\"${BUILD_ROOT}\"\n\nwhile ! [ -d \"${DERIVED_DATA_CANDIDATE}/SourcePackages\" ]; do\n  if [ \"${DERIVED_DATA_CANDIDATE}\" = / ]; then\n    echo >&2 \"error: Unable to locate SourcePackages directory from BUILD_ROOT: '${BUILD_ROOT}'\"\n    exit 1\n  fi\n\n  DERIVED_DATA_CANDIDATE=\"$(dirname \"${DERIVED_DATA_CANDIDATE}\")\"\ndone\n\n# Grab a reference to the directory where scripts are checked out\nSCRIPT_PATH=\"${DERIVED_DATA_CANDIDATE}/SourcePackages/checkouts/apollo-ios/scripts\"\n\nif [ -z \"${SCRIPT_PATH}\" ]; then\n    echo >&2 \"error: Couldn't find the CLI script in your checked out SPM packages; make sure to add the framework to your project.\"\n    exit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n\"${SCRIPT_PATH}\"/run-bundled-codegen.sh codegen:generate --target=swift --includes=./**/*.graphql --localSchemaFile=\"GraphQL/Schema.json\" API.swift\n";
+			shellScript = "# Don't run this during index builds\nif [ $ACTION = \"indexbuild\" ]; then exit 0; fi\n\n# Go to the build root and search up the chain to find the Derived Data Path where the source packages are checked out.\nDERIVED_DATA_CANDIDATE=\"${BUILD_ROOT}\"\n\nwhile ! [ -d \"${DERIVED_DATA_CANDIDATE}/SourcePackages\" ]; do\n  if [ \"${DERIVED_DATA_CANDIDATE}\" = / ]; then\n    echo >&2 \"error: Unable to locate SourcePackages directory from BUILD_ROOT: '${BUILD_ROOT}'\"\n    exit 1\n  fi\n\n  DERIVED_DATA_CANDIDATE=\"$(dirname \"${DERIVED_DATA_CANDIDATE}\")\"\ndone\n\n# Grab a reference to the directory where scripts are checked out\nSCRIPT_PATH=\"${DERIVED_DATA_CANDIDATE}/SourcePackages/checkouts/apollo-ios/scripts\"\n\nif [ -z \"${SCRIPT_PATH}\" ]; then\n    echo >&2 \"error: Couldn't find the CLI script in your checked out SPM packages; make sure to add the framework to your project.\"\n    exit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n\"${SCRIPT_PATH}\"/run-bundled-codegen.sh codegen:generate --target=swift --includes=./**/*.graphql --localSchemaFile=\"GraphQL/Schema.json\" GraphQL/API.swift\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -244,12 +238,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0E63C3627B9B33B0033B879 /* LaunchesList.swift in Sources */,
+				C0E63C3F27B9C4020033B879 /* LaunchDetailViewModel.swift in Sources */,
+				C0E63C3627B9B33B0033B879 /* LaunchList.swift in Sources */,
 				C0E63C0F27B9ABD30033B879 /* ContentView.swift in Sources */,
-				C0E63C3027B9B2320033B879 /* API.swift in Sources */,
 				C0E63C3227B9B2590033B879 /* Network.swift in Sources */,
 				C0E63C0D27B9ABD30033B879 /* SpaceXApp.swift in Sources */,
-				C0E63C3927B9B5140033B879 /* LaunchesListViewModel.swift in Sources */,
+				C0E63C3D27B9C3870033B879 /* LaunchDetail.swift in Sources */,
+				C0E63C3B27B9C3070033B879 /* API.swift in Sources */,
+				C0E63C3927B9B5140033B879 /* LaunchListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
