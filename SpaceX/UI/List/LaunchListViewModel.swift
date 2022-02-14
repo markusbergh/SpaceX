@@ -5,15 +5,27 @@
 //  Created by Markus Bergh on 2022-02-13.
 //
 
+import Apollo
 import SwiftUI
 
-class LaunchListViewModel: ObservableObject {
+typealias Launch = LaunchListQuery.Data.Launch.Launch
+
+protocol LaunchListProvider {
+    func fetchLaunches() async throws -> [Launch]
+}
+
+class LaunchListViewModel: ObservableObject, LaunchListProvider {
     enum Action {
         case fetchLaunches
+        case fetchMore
+    }
+    
+    enum Error: Swift.Error {
+        case fetchItemsError
     }
     
     /// Holder of launches data.
-    @Published private(set) var launches = [LaunchListQuery.Data.Launch.Launch]()
+    @Published private(set) var launches = [Launch]()
     
     /// Error that needs handling.
     @Published var error: NetworkError?
@@ -28,24 +40,93 @@ class LaunchListViewModel: ObservableObject {
     func dispatch(action: Action) {
         switch action {
         case .fetchLaunches:
-             fetchLaunches()
+            launches.removeAll()
+            
+            Task {
+                do {
+                    let launches = try await fetchLaunches()
+                    
+                    DispatchQueue.main.async {
+                        self.launches.append(contentsOf: launches)
+                    }
+                } catch let NetworkError.requestError(message: message) {
+                    // TODO: Handle error
+                    assertionFailure("Unhandled error: \(message)")
+                }
+            }
+        case .fetchMore:
+            // TODO: Handle
+            break
         }
     }
     
-    private func fetchLaunches() {
-        Task {
-            do {
-                let graphQLResult = try await network.fetchLaunches()
-                
-                if let launchConnection = graphQLResult.data?.launches {
-                    DispatchQueue.main.async {
-                        self.launches.append(contentsOf: launchConnection.launches.compactMap { $0 })
-                    }
-                }
-            } catch let NetworkError.requestError(message: message) {
-                // TODO: Handle error
-                assertionFailure("Unhandled error: \(message)")
+    func fetchLaunches() async throws -> [Launch] {
+        guard launches.isEmpty else {
+            throw Error.fetchItemsError
+        }
+        
+        do {
+            let graphQLResult = try await network.fetchLaunches(pageSize: 15)
+            
+            guard let launchConnection = graphQLResult.data?.launches else {
+                throw Error.fetchItemsError
             }
+            
+            return launchConnection.launches.compactMap { $0 }
+        } catch {
+            throw error
         }
     }
+}
+
+// MARK: Mock
+
+class MockLaunchListViewModel: LaunchListViewModel {
+    override func fetchLaunches() async throws -> [Launch] {
+        let launches = [
+            Launch(
+                id: .init("1"),
+                site: "KSC LC 39A",
+                mission: .init(
+                    name: "Starlink-15 (v1.0)",
+                    missionPatch: nil
+                )
+            ),
+            Launch(
+                id: .init("1"),
+                site: "KSC LC 39A",
+                mission: .init(
+                    name: "Starlink-15 (v1.0)",
+                    missionPatch: nil
+                )
+            ),
+            Launch(
+                id: .init("1"),
+                site: "KSC LC 39A",
+                mission: .init(
+                    name: "Starlink-15 (v1.0)",
+                    missionPatch: nil
+                )
+            ),
+            Launch(
+                id: .init("1"),
+                site: "KSC LC 39A",
+                mission: .init(
+                    name: "Starlink-15 (v1.0)",
+                    missionPatch: nil
+                )
+            ),
+            Launch(
+                id: .init("1"),
+                site: "KSC LC 39A",
+                mission: .init(
+                    name: "Starlink-15 (v1.0)",
+                    missionPatch: nil
+                )
+            )
+        ]
+        
+        return launches
+    }
+    
 }

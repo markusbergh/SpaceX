@@ -30,9 +30,11 @@ class Network {
 extension Network {
     
     /// Will try and fetch all launches. Can throw an error.
-    func fetchLaunches() async throws -> GraphQLResult<LaunchListQuery.Data> {
+    ///
+    /// - Parameter pageSize: Number of items in each batch, defaults to `20`.
+    func fetchLaunches(pageSize: Int = 20) async throws -> GraphQLResult<LaunchListQuery.Data> {
         try await withCheckedThrowingContinuation { continuation in
-            apollo.fetch(query: LaunchListQuery()) { result in
+            apollo.fetch(query: LaunchListQuery(pageSize: pageSize)) { result in
                 let errorMessage = "Something went wrong!"
                 
                 switch result {

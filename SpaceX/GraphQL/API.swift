@@ -251,11 +251,11 @@ public final class LaunchListQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
     """
-    query LaunchList {
-      launches {
+    query LaunchList($pageSize: Int = 20) {
+      launches(pageSize: $pageSize) {
         __typename
-        hasMore
         cursor
+        hasMore
         launches {
           __typename
           id
@@ -272,7 +272,14 @@ public final class LaunchListQuery: GraphQLQuery {
 
   public let operationName: String = "LaunchList"
 
-  public init() {
+  public var pageSize: Int?
+
+  public init(pageSize: Int? = nil) {
+    self.pageSize = pageSize
+  }
+
+  public var variables: GraphQLMap? {
+    return ["pageSize": pageSize]
   }
 
   public struct Data: GraphQLSelectionSet {
@@ -280,7 +287,7 @@ public final class LaunchListQuery: GraphQLQuery {
 
     public static var selections: [GraphQLSelection] {
       return [
-        GraphQLField("launches", type: .nonNull(.object(Launch.selections))),
+        GraphQLField("launches", arguments: ["pageSize": GraphQLVariable("pageSize")], type: .nonNull(.object(Launch.selections))),
       ]
     }
 
@@ -309,8 +316,8 @@ public final class LaunchListQuery: GraphQLQuery {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("hasMore", type: .nonNull(.scalar(Bool.self))),
           GraphQLField("cursor", type: .nonNull(.scalar(String.self))),
+          GraphQLField("hasMore", type: .nonNull(.scalar(Bool.self))),
           GraphQLField("launches", type: .nonNull(.list(.object(Launch.selections)))),
         ]
       }
@@ -321,8 +328,8 @@ public final class LaunchListQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(hasMore: Bool, cursor: String, launches: [Launch?]) {
-        self.init(unsafeResultMap: ["__typename": "LaunchConnection", "hasMore": hasMore, "cursor": cursor, "launches": launches.map { (value: Launch?) -> ResultMap? in value.flatMap { (value: Launch) -> ResultMap in value.resultMap } }])
+      public init(cursor: String, hasMore: Bool, launches: [Launch?]) {
+        self.init(unsafeResultMap: ["__typename": "LaunchConnection", "cursor": cursor, "hasMore": hasMore, "launches": launches.map { (value: Launch?) -> ResultMap? in value.flatMap { (value: Launch) -> ResultMap in value.resultMap } }])
       }
 
       public var __typename: String {
@@ -334,21 +341,21 @@ public final class LaunchListQuery: GraphQLQuery {
         }
       }
 
-      public var hasMore: Bool {
-        get {
-          return resultMap["hasMore"]! as! Bool
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "hasMore")
-        }
-      }
-
       public var cursor: String {
         get {
           return resultMap["cursor"]! as! String
         }
         set {
           resultMap.updateValue(newValue, forKey: "cursor")
+        }
+      }
+
+      public var hasMore: Bool {
+        get {
+          return resultMap["hasMore"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "hasMore")
         }
       }
 

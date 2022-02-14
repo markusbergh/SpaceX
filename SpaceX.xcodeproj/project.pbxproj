@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C09AE13127BAD2BD0097B069 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09AE13027BAD2BD0097B069 /* Color.swift */; };
+		C0A3171327BAE29D0078767C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0A3171227BAE29D0078767C /* Info.plist */; };
+		C0CB55DF27BA917E00DE1EB2 /* LaunchListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CB55DE27BA917E00DE1EB2 /* LaunchListItem.swift */; };
 		C0E63C0D27B9ABD30033B879 /* SpaceXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C0C27B9ABD30033B879 /* SpaceXApp.swift */; };
 		C0E63C0F27B9ABD30033B879 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C0E27B9ABD30033B879 /* ContentView.swift */; };
 		C0E63C1127B9ABD50033B879 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0E63C1027B9ABD50033B879 /* Assets.xcassets */; };
@@ -24,6 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C09AE13027BAD2BD0097B069 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		C0A3171227BAE29D0078767C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C0CB55DE27BA917E00DE1EB2 /* LaunchListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchListItem.swift; sourceTree = "<group>"; };
 		C0E63C0927B9ABD30033B879 /* SpaceX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0E63C0C27B9ABD30033B879 /* SpaceXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceXApp.swift; sourceTree = "<group>"; };
 		C0E63C0E27B9ABD30033B879 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +59,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C09AE12F27BAD2B50097B069 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				C09AE13027BAD2BD0097B069 /* Color.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		C0E63C0027B9ABD30033B879 = {
 			isa = PBXGroup;
 			children = (
@@ -72,9 +86,11 @@
 		C0E63C0B27B9ABD30033B879 /* SpaceX */ = {
 			isa = PBXGroup;
 			children = (
+				C09AE12F27BAD2B50097B069 /* Extension */,
 				C0E63C2827B9B0A50033B879 /* GraphQL */,
 				C0E63C1A27B9AC070033B879 /* UI */,
 				C0E63C0C27B9ABD30033B879 /* SpaceXApp.swift */,
+				C0A3171227BAE29D0078767C /* Info.plist */,
 				C0E63C1027B9ABD50033B879 /* Assets.xcassets */,
 				C0E63C1227B9ABD50033B879 /* Preview Content */,
 			);
@@ -123,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E63C3527B9B33B0033B879 /* LaunchList.swift */,
+				C0CB55DE27BA917E00DE1EB2 /* LaunchListItem.swift */,
 				C0E63C3827B9B5140033B879 /* LaunchListViewModel.swift */,
 			);
 			path = List;
@@ -206,6 +223,7 @@
 				C0E63C2D27B9B1390033B879 /* LaunchList.graphql in Resources */,
 				C0E63C1427B9ABD50033B879 /* Preview Assets.xcassets in Resources */,
 				C0E63C1127B9ABD50033B879 /* Assets.xcassets in Resources */,
+				C0A3171327BAE29D0078767C /* Info.plist in Resources */,
 				C0E63C4127B9C7090033B879 /* LaunchDetails.graphql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,7 +247,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Don't run this during index builds\nif [ $ACTION = \"indexbuild\" ]; then exit 0; fi\n\n# Go to the build root and search up the chain to find the Derived Data Path where the source packages are checked out.\nDERIVED_DATA_CANDIDATE=\"${BUILD_ROOT}\"\n\nwhile ! [ -d \"${DERIVED_DATA_CANDIDATE}/SourcePackages\" ]; do\n  if [ \"${DERIVED_DATA_CANDIDATE}\" = / ]; then\n    echo >&2 \"error: Unable to locate SourcePackages directory from BUILD_ROOT: '${BUILD_ROOT}'\"\n    exit 1\n  fi\n\n  DERIVED_DATA_CANDIDATE=\"$(dirname \"${DERIVED_DATA_CANDIDATE}\")\"\ndone\n\n# Grab a reference to the directory where scripts are checked out\nSCRIPT_PATH=\"${DERIVED_DATA_CANDIDATE}/SourcePackages/checkouts/apollo-ios/scripts\"\n\nif [ -z \"${SCRIPT_PATH}\" ]; then\n    echo >&2 \"error: Couldn't find the CLI script in your checked out SPM packages; make sure to add the framework to your project.\"\n    exit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n\"${SCRIPT_PATH}\"/run-bundled-codegen.sh codegen:generate --target=swift --includes=./**/*.graphql --localSchemaFile=\"GraphQL/Schema.json\" GraphQL/API.swift\n";
+			shellScript = "# Don't run this during index builds\nif [ $ACTION = \"indexbuild\" ]; then exit 0; fi\n\n# Go to the build root and search up the chain to find the Derived Data Path where the source packages are checked out.\nDERIVED_DATA_CANDIDATE=\"${BUILD_ROOT}\"\n\nwhile ! [ -d \"${DERIVED_DATA_CANDIDATE}/SourcePackages\" ]; do\n  if [ \"${DERIVED_DATA_CANDIDATE}\" = / ]; then\n    echo >&2 \"error: Unable to locate SourcePackages directory from BUILD_ROOT: '${BUILD_ROOT}'\"\n    exit 1\n  fi\n\n  DERIVED_DATA_CANDIDATE=\"$(dirname \"${DERIVED_DATA_CANDIDATE}\")\"\ndone\n\n# Grab a reference to the directory where scripts are checked out\nSCRIPT_PATH=\"${DERIVED_DATA_CANDIDATE}/SourcePackages/checkouts/apollo-ios/scripts\"\n\nif [ -z \"${SCRIPT_PATH}\" ]; then\n    echo >&2 \"error: Couldn't find the CLI script in your checked out SPM packages; make sure to add the framework to your project.\"\n    exit 1\nfi\n\nif [ XCODE_RUNNING_FOR_PREVIEWS == 0 ]; then\n    cd \"${SRCROOT}/${TARGET_NAME}\"\n    #\"${SCRIPT_PATH}\"/run-bundled-codegen.sh codegen:generate --target=swift --includes=./**/*.graphql --localSchemaFile=\"GraphQL/Schema.json\" GraphQL/API.swift\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -240,6 +258,8 @@
 			files = (
 				C0E63C3F27B9C4020033B879 /* LaunchDetailViewModel.swift in Sources */,
 				C0E63C3627B9B33B0033B879 /* LaunchList.swift in Sources */,
+				C0CB55DF27BA917E00DE1EB2 /* LaunchListItem.swift in Sources */,
+				C09AE13127BAD2BD0097B069 /* Color.swift in Sources */,
 				C0E63C0F27B9ABD30033B879 /* ContentView.swift in Sources */,
 				C0E63C3227B9B2590033B879 /* Network.swift in Sources */,
 				C0E63C0D27B9ABD30033B879 /* SpaceXApp.swift in Sources */,
@@ -379,9 +399,12 @@
 				DEVELOPMENT_TEAM = RGRS92T46T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SpaceX/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -393,7 +416,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -408,9 +431,12 @@
 				DEVELOPMENT_TEAM = RGRS92T46T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SpaceX/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -422,7 +448,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

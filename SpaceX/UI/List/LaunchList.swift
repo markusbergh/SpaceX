@@ -9,12 +9,20 @@ import SwiftUI
 
 struct LaunchList: View {
     
-    @StateObject private var viewModel = LaunchListViewModel()
-    
+    @ObservedObject var viewModel: LaunchListViewModel
+        
     var body: some View {
-        List {
-            Section("Launches") {
-                ForEach(viewModel.launches, id:\.self) { launch in
+        VStack(alignment: .leading) {
+            Text("SpaceX")
+                .foregroundColor(.listTitle)
+                .font(.system(size: 48, weight: .semibold))
+                .padding()
+
+            List {
+                ForEach(viewModel.launches.indices, id:\.self) { index in
+                    let launch = viewModel.launches[index]
+                    let backgroundColor: Color = index % 2 == 0 ? .listItemPrimary : .listItemSecondary
+                    
                     NavigationLink(
                         destination: NavigationLazyView(
                             LaunchDetail(
@@ -23,37 +31,40 @@ struct LaunchList: View {
                             )
                         )
                     ) {
-                        HStack {
-                            if let missionPatch = launch.mission?.missionPatch {
-                                AsyncImage(url: URL(string: missionPatch)) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                .frame(width: 50, height: 50)
-                                
-                                Spacer()
-                            }
-                            
-                            Text(launch.site ?? "No data")
-                        }
+                        LaunchListItem(
+                            missionName: launch.mission?.name,
+                            missionPatch: launch.mission?.missionPatch,
+                            site: launch.site
+                        )
                     }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 15.0)
+                            .fill(backgroundColor)
+                            .shadow(color: .black.opacity(0.25), radius: 10, x: 0, y: 10.0)
+                    )
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .padding(.bottom)
+                }
+            }
+            .onAppear {
+                viewModel.dispatch(action: .fetchLaunches)
+            }
+            .listStyle(.plain)
+            .alert(item: $viewModel.error) { error in
+                switch error {
+                case let .requestError(message):
+                    return Alert(
+                        title: Text("Oops!"),
+                        message: Text(message),
+                        dismissButton: .default(Text("OK"))
+                    )
                 }
             }
         }
-        .alert(item: $viewModel.error) { error in
-            switch error {
-            case let .requestError(message):
-                return Alert(
-                    title: Text("Oops!"),
-                    message: Text(message),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-        }
-        .onAppear {
-            viewModel.dispatch(action: .fetchLaunches)
-        }
+        .padding()
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
@@ -80,5 +91,13 @@ extension LaunchListQuery.Data.Launch.Launch: Hashable, Equatable {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+struct LaunchList_Previews: PreviewProvider {
+    static var previews: some View {
+        let viewModel = MockLaunchListViewModel()
+
+        LaunchList(viewModel: viewModel)
     }
 }

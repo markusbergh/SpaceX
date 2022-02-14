@@ -1,7 +1,7 @@
-query LaunchList {
-  launches {
-    hasMore
+query LaunchList($pageSize: Int = 20) {
+  launches(pageSize: $pageSize) {
     cursor
+    hasMore
     launches {
       id
       site

@@ -8,12 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @StateObject private var viewModel = LaunchListViewModel()
+
     var body: some View {
         NavigationView {
-            LaunchList()
-                .navigationTitle("SpaceX")
+            LaunchList(viewModel: viewModel)
+                .navigationBarHidden(true)
+                .background(spaceShuttle, alignment: .top)
+                .background(Color.background)
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+    
+    private var spaceShuttle: some View {
+        Image("SpaceShuttle")
+            .resizable()
+            .renderingMode(.original)
+            .colorMultiply(Color.background)
+            .scaledToFit()
+            .frame(width: UIScreen.main.bounds.width * 2)
+            .offset(y: -185)
+            .ignoresSafeArea()
     }
 }
 
