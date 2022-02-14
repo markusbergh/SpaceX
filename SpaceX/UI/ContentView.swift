@@ -10,26 +10,39 @@ import SwiftUI
 struct ContentView: View {
 
     @StateObject private var viewModel = LaunchListViewModel()
-
-    var body: some View {
-        NavigationView {
-            LaunchList(viewModel: viewModel)
-                .navigationBarHidden(true)
-                .background(spaceShuttle, alignment: .top)
-                .background(Color.background)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+    
+    init() {
+        configure()
     }
     
-    private var spaceShuttle: some View {
-        Image("SpaceShuttle")
-            .resizable()
-            .renderingMode(.original)
-            .colorMultiply(Color.background)
-            .scaledToFit()
-            .frame(width: UIScreen.main.bounds.width * 2)
-            .offset(y: -185)
-            .ignoresSafeArea()
+    private func configure() {
+        // Content scrolled under
+        let standardAppearance = UITabBarAppearance()
+        standardAppearance.configureWithTransparentBackground()
+        standardAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        UITabBar.appearance().standardAppearance = standardAppearance
+        
+        // Nothing is under
+        let scrollEdgeAppearance = UITabBarAppearance()
+        scrollEdgeAppearance.configureWithTransparentBackground()
+        UITabBar.appearance().scrollEdgeAppearance = scrollEdgeAppearance
+    }
+
+    var body: some View {
+        TabView {
+            LaunchList(viewModel: viewModel)
+                .tabItem {
+                    Label("Launches", systemImage: "paperplane.fill")
+                }
+            
+            VStack {
+                Text("About")
+            }
+            .tabItem {
+                Label("About", systemImage: "cursorarrow.rays")
+            }
+        }
+        .accentColor(.green)
     }
 }
 

@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C09AE13127BAD2BD0097B069 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09AE13027BAD2BD0097B069 /* Color.swift */; };
-		C0A3171327BAE29D0078767C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0A3171227BAE29D0078767C /* Info.plist */; };
+		C09AE13127BAD2BD0097B069 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09AE13027BAD2BD0097B069 /* Color+Extension.swift */; };
 		C0CB55DF27BA917E00DE1EB2 /* LaunchListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CB55DE27BA917E00DE1EB2 /* LaunchListItem.swift */; };
+		C0E17A4727BAEAF300F2AA60 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E17A4627BAEAF300F2AA60 /* View+Extension.swift */; };
 		C0E63C0D27B9ABD30033B879 /* SpaceXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C0C27B9ABD30033B879 /* SpaceXApp.swift */; };
 		C0E63C0F27B9ABD30033B879 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E63C0E27B9ABD30033B879 /* ContentView.swift */; };
 		C0E63C1127B9ABD50033B879 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0E63C1027B9ABD50033B879 /* Assets.xcassets */; };
@@ -27,9 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C09AE13027BAD2BD0097B069 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		C0A3171227BAE29D0078767C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C09AE13027BAD2BD0097B069 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		C0CB55DE27BA917E00DE1EB2 /* LaunchListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchListItem.swift; sourceTree = "<group>"; };
+		C0E17A4627BAEAF300F2AA60 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		C0E63C0927B9ABD30033B879 /* SpaceX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0E63C0C27B9ABD30033B879 /* SpaceXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceXApp.swift; sourceTree = "<group>"; };
 		C0E63C0E27B9ABD30033B879 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -62,7 +62,8 @@
 		C09AE12F27BAD2B50097B069 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				C09AE13027BAD2BD0097B069 /* Color.swift */,
+				C09AE13027BAD2BD0097B069 /* Color+Extension.swift */,
+				C0E17A4627BAEAF300F2AA60 /* View+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -90,7 +91,6 @@
 				C0E63C2827B9B0A50033B879 /* GraphQL */,
 				C0E63C1A27B9AC070033B879 /* UI */,
 				C0E63C0C27B9ABD30033B879 /* SpaceXApp.swift */,
-				C0A3171227BAE29D0078767C /* Info.plist */,
 				C0E63C1027B9ABD50033B879 /* Assets.xcassets */,
 				C0E63C1227B9ABD50033B879 /* Preview Content */,
 			);
@@ -223,7 +223,6 @@
 				C0E63C2D27B9B1390033B879 /* LaunchList.graphql in Resources */,
 				C0E63C1427B9ABD50033B879 /* Preview Assets.xcassets in Resources */,
 				C0E63C1127B9ABD50033B879 /* Assets.xcassets in Resources */,
-				C0A3171327BAE29D0078767C /* Info.plist in Resources */,
 				C0E63C4127B9C7090033B879 /* LaunchDetails.graphql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,10 +258,11 @@
 				C0E63C3F27B9C4020033B879 /* LaunchDetailViewModel.swift in Sources */,
 				C0E63C3627B9B33B0033B879 /* LaunchList.swift in Sources */,
 				C0CB55DF27BA917E00DE1EB2 /* LaunchListItem.swift in Sources */,
-				C09AE13127BAD2BD0097B069 /* Color.swift in Sources */,
+				C09AE13127BAD2BD0097B069 /* Color+Extension.swift in Sources */,
 				C0E63C0F27B9ABD30033B879 /* ContentView.swift in Sources */,
 				C0E63C3227B9B2590033B879 /* Network.swift in Sources */,
 				C0E63C0D27B9ABD30033B879 /* SpaceXApp.swift in Sources */,
+				C0E17A4727BAEAF300F2AA60 /* View+Extension.swift in Sources */,
 				C0E63C3D27B9C3870033B879 /* LaunchDetail.swift in Sources */,
 				C0E63C3B27B9C3070033B879 /* API.swift in Sources */,
 				C0E63C3927B9B5140033B879 /* LaunchListViewModel.swift in Sources */,

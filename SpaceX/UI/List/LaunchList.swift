@@ -12,59 +12,110 @@ struct LaunchList: View {
     @ObservedObject var viewModel: LaunchListViewModel
         
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("SpaceX")
-                .foregroundColor(.listTitle)
-                .font(.system(size: 48, weight: .semibold))
-                .padding()
-
-            List {
-                ForEach(viewModel.launches.indices, id:\.self) { index in
-                    let launch = viewModel.launches[index]
-                    let backgroundColor: Color = index % 2 == 0 ? .listItemPrimary : .listItemSecondary
-                    
-                    NavigationLink(
-                        destination: NavigationLazyView(
-                            LaunchDetail(
-                                launchID: launch.id,
-                                viewModel: LaunchDetailViewModel()
-                            )
+        NavigationView {
+            VStack(alignment: .leading) {
+                Text("SpaceX")
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.green, .green, .green, .purple],
+                            startPoint: .leading,
+                            endPoint: .trailing
                         )
-                    ) {
-                        LaunchListItem(
-                            missionName: launch.mission?.name,
-                            missionPatch: launch.mission?.missionPatch,
-                            site: launch.site
+                    )
+                    .font(.system(size: 48, weight: .semibold))
+                    .padding(.top, 20)
+                    .padding(.horizontal, 30)
+
+                List {
+                    ForEach(viewModel.launches.indices, id:\.self) { index in
+                        let launch = viewModel.launches[index]
+                        let backgroundColor: Color = index % 2 == 0 ? .listItemPrimary : .listItemSecondary
+                        
+                        ZStack {
+                            NavigationLink(
+                                destination: NavigationLazyView(
+                                    LaunchDetail(
+                                        launchID: launch.id,
+                                        viewModel: LaunchDetailViewModel()
+                                    )
+                                )
+                            ) {
+                                EmptyView()
+                            }
+
+                            VStack(alignment: .trailing, spacing: 0) {
+                                Text(Date(), style: .date)
+                                    .font(.footnote)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.green)
+                                    .padding(.trailing, 5)
+                                    .padding(.bottom, 5)
+                                
+                                LaunchListItem(
+                                    missionName: launch.mission?.name,
+                                    missionPatch: launch.mission?.missionPatch,
+                                    site: launch.site
+                                )
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 15.0)
+                                        .fill(backgroundColor)
+                                        .shadow(color: .black.opacity(0.25), radius: 10, x: 0, y: 10.0)
+                                )
+                                .padding(.bottom, 25)
+                                
+                                Divider().frame(height: 2).background(
+                                    LinearGradient(
+                                        colors: [
+                                            .clear,
+                                            .green.opacity(0.1),
+                                            .green.opacity(0.2),
+                                            .green.opacity(0.3)
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .padding(.trailing, 5)
+                                .padding(.bottom, 15)
+                            }
+                        }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .padding(.horizontal, 10)
+                    }
+                }
+                .onAppear {
+                    viewModel.dispatch(action: .fetchLaunches)
+                }
+                .listStyle(.plain)
+                .alert(item: $viewModel.error) { error in
+                    switch error {
+                    case let .requestError(message):
+                        return Alert(
+                            title: Text("Oops!"),
+                            message: Text(message),
+                            dismissButton: .default(Text("OK"))
                         )
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 15.0)
-                            .fill(backgroundColor)
-                            .shadow(color: .black.opacity(0.25), radius: 10, x: 0, y: 10.0)
-                    )
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .padding(.bottom)
                 }
             }
-            .onAppear {
-                viewModel.dispatch(action: .fetchLaunches)
-            }
-            .listStyle(.plain)
-            .alert(item: $viewModel.error) { error in
-                switch error {
-                case let .requestError(message):
-                    return Alert(
-                        title: Text("Oops!"),
-                        message: Text(message),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
-            }
+            .navigationBarHidden(true)
+            .background(spaceShuttle, alignment: .top)
+            .background(Color.background)
         }
-        .padding()
-        .edgesIgnoringSafeArea(.bottom)
+    }
+    
+    private var spaceShuttle: some View {
+        Image("SpaceShuttle")
+            .resizable()
+            .renderingMode(.original)
+            .saturation(0.0)
+            .colorMultiply(Color.background)
+            .scaledToFit()
+            .frame(width: UIScreen.main.bounds.width * 2)
+            .offset(y: -185)
+            .ignoresSafeArea()
     }
 }
 

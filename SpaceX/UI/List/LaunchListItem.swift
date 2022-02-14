@@ -20,18 +20,41 @@ struct LaunchListItem: View {
                     image.resizable()
                 } placeholder: {
                     ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .green))
                 }
+                .colorMultiply(.green)
                 .frame(width: 50, height: 50)
+            } else {
+                Image("NoImage")
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(.green)
+                    .frame(width: 25, height: 25)
+                    .frame(width: 50, height: 50)
+                    .background(Circle())
             }
             
             Spacer()
             
-            VStack(alignment: .trailing) {
-                Text(site ?? "No data")
-                
-                Text(missionName ?? "")
-                    .font(.footnote)
-                    .fontWeight(.bold)
+            HStack {
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(site ?? "No data")
+                        .font(.title2)
+                        .fontWeight(.regular)
+                        .foregroundColor(.white)
+                    
+                    Text(missionName ?? "")
+                        .foregroundColor(.white.opacity(0.5))
+                        .font(.caption)
+                        .fontWeight(.heavy)
+                }
+
+                Image(systemName: "chevron.right")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white)
+                    .frame(width: 12, height: 12)
+                    .padding(.leading, 5)
             }
         }
     }
