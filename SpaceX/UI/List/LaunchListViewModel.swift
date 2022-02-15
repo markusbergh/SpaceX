@@ -8,7 +8,7 @@
 import Apollo
 import SwiftUI
 
-typealias Launch = LaunchListQuery.Data.Launch.Launch
+typealias Launch = LaunchListQuery.Data.LaunchesPast
 
 protocol LaunchListProvider {
     func fetchLaunches() async throws -> [Launch]
@@ -68,11 +68,11 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
         do {
             let graphQLResult = try await network.fetchLaunches(pageSize: 15)
             
-            guard let launchConnection = graphQLResult.data?.launches else {
+            guard let launchesPast = graphQLResult.data?.launchesPast else {
                 throw Error.fetchItemsError
             }
             
-            return launchConnection.launches.compactMap { $0 }
+            return launchesPast.compactMap { $0 }
         } catch {
             throw error
         }
@@ -86,44 +86,36 @@ class MockLaunchListViewModel: LaunchListViewModel {
         let launches = [
             Launch(
                 id: .init("1"),
-                site: "KSC LC 39A",
-                mission: .init(
-                    name: "Starlink-15 (v1.0)",
-                    missionPatch: nil
-                )
+                launchSite: .init(siteName: "KSC LC 39A"),
+                missionName: "Starlink-15 (v1.0)",
+                links: .init(missionPatchSmall: nil),
+                launchYear: "2020",
+                launchDateUtc: "2020-10-24T15:31:00.000Z"
             ),
             Launch(
                 id: .init("1"),
-                site: "KSC LC 39A",
-                mission: .init(
-                    name: "Starlink-15 (v1.0)",
-                    missionPatch: nil
-                )
+                launchSite: .init(siteName: "KSC LC 39A"),
+                missionName: "Starlink-15 (v1.0)",
+                links: .init(missionPatchSmall: nil),
+                launchYear: "2020",
+                launchDateUtc: "2020-10-24T15:31:00.000Z"
             ),
             Launch(
                 id: .init("1"),
-                site: "KSC LC 39A",
-                mission: .init(
-                    name: "Starlink-15 (v1.0)",
-                    missionPatch: nil
-                )
+                launchSite: .init(siteName: "KSC LC 39A"),
+                missionName: "Starlink-15 (v1.0)",
+                links: .init(missionPatchSmall: nil),
+                launchYear: "2020",
+                launchDateUtc: "2020-10-24T15:31:00.000Z"
             ),
             Launch(
                 id: .init("1"),
-                site: "KSC LC 39A",
-                mission: .init(
-                    name: "Starlink-15 (v1.0)",
-                    missionPatch: nil
-                )
+                launchSite: .init(siteName: "KSC LC 39A"),
+                missionName: "Starlink-15 (v1.0)",
+                links: .init(missionPatchSmall: nil),
+                launchYear: "2020",
+                launchDateUtc: "2020-10-24T15:31:00.000Z"
             ),
-            Launch(
-                id: .init("1"),
-                site: "KSC LC 39A",
-                mission: .init(
-                    name: "Starlink-15 (v1.0)",
-                    missionPatch: nil
-                )
-            )
         ]
         
         return launches

@@ -10,7 +10,7 @@ import Apollo
 
 class LaunchDetailViewModel: ObservableObject {
     enum Action {
-        case fetchLaunch(launchID: GraphQLID)
+        case fetchLaunch(launchID: GraphQLID?)
     }
     
     /// Network layer
@@ -29,7 +29,9 @@ class LaunchDetailViewModel: ObservableObject {
         }
     }
     
-    private func fetchLaunch(_ id: GraphQLID) {
+    private func fetchLaunch(_ id: GraphQLID?) {
+        guard let id = id else { return }
+        
         Task {
             do {
                 let graphQLResult = try await network.fetchLaunch(with: id)

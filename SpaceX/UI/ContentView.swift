@@ -58,6 +58,7 @@ extension ContentView {
         // Nothing is under
         let scrollEdgeAppearance = UINavigationBarAppearance()
         scrollEdgeAppearance.configureWithTransparentBackground()
+        scrollEdgeAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         UINavigationBar.appearance().scrollEdgeAppearance = scrollEdgeAppearance
     }
 }

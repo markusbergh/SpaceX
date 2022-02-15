@@ -14,7 +14,7 @@ struct LaunchDetail: View {
     
     var launchID: GraphQLID?
     
-    init(launchID: GraphQLID, viewModel: LaunchDetailViewModel) {
+    init(launchID: GraphQLID?, viewModel: LaunchDetailViewModel) {
         self.launchID = launchID
         self.viewModel = viewModel
         
@@ -24,7 +24,7 @@ struct LaunchDetail: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .leading) {
-                Text(viewModel.launch?.site ?? "")
+                Text(viewModel.launch?.launchSite?.siteName ?? "")
                     .foregroundStyle(
                         LinearGradient(
                             colors: [.green, .green, .green, .purple],
@@ -35,8 +35,8 @@ struct LaunchDetail: View {
                     .font(.system(size: 38, weight: .semibold, design: .monospaced))
                     .padding(.bottom, 20)
                 
-                HStack(spacing: 15) {
-                    if let missionPatch = viewModel.launch?.mission?.missionPatch {
+                HStack(spacing: 25) {
+                    if let missionPatch = viewModel.launch?.links?.missionPatch {
                         AsyncImage(url: URL(string: missionPatch)) { image in
                             image.resizable()
                         } placeholder: {
@@ -48,7 +48,7 @@ struct LaunchDetail: View {
                     }
                     
                     VStack(alignment: .leading) {
-                        if let missionName = viewModel.launch?.mission?.name {
+                        if let missionName = viewModel.launch?.missionName {
                             Text(missionName)
                                 .font(.system(size: 19, weight: .regular, design: .monospaced))
                         }
@@ -58,8 +58,8 @@ struct LaunchDetail: View {
                                 .font(.system(size: 16, weight: .bold, design: .monospaced))
                         }
                         
-                        if let rocketName = viewModel.launch?.rocket?.name,
-                           let rocketType = viewModel.launch?.rocket?.type {
+                        if let rocketName = viewModel.launch?.rocket?.rocketName,
+                           let rocketType = viewModel.launch?.rocket?.rocketType {
                             Text("\(rocketName) (\(rocketType))")
                                 .font(.system(size: 16, weight: .regular, design: .monospaced))
                         }

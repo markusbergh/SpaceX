@@ -31,13 +31,12 @@ struct LaunchList: View {
                     
                     ForEach(viewModel.launches.indices, id:\.self) { index in
                         let launch = viewModel.launches[index]
-                        let backgroundColor: Color = index % 2 == 0 ? .listItemPrimary : .listItemSecondary
                         
                         ZStack {
                             NavigationLink(
                                 destination: NavigationLazyView(
                                     LaunchDetail(
-                                        launchID: launch.id,
+                                        launchID: launch.id ?? "",
                                         viewModel: LaunchDetailViewModel()
                                     )
                                 )
@@ -46,39 +45,15 @@ struct LaunchList: View {
                             }
 
                             VStack(alignment: .trailing, spacing: 0) {
-                                Text(Date(), style: .date)
-                                    .font(.system(size: 14, weight: .bold, design: .monospaced))
-                                    .foregroundColor(.green)
-                                    .padding(.trailing, 5)
-                                    .padding(.bottom, 5)
-                                
                                 LaunchListItem(
-                                    missionName: launch.mission?.name,
-                                    missionPatch: launch.mission?.missionPatch,
-                                    site: launch.site
+                                    missionName: launch.missionName,
+                                    missionPatch: launch.links?.missionPatchSmall,
+                                    site: launch.launchSite?.siteName
                                 )
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 15.0)
-                                        .fill(backgroundColor)
-                                        .shadow(color: .black.opacity(0.25), radius: 10, x: 0, y: 10.0)
-                                )
-                                .padding(.bottom, 25)
+                                .padding(.bottom, 20)
                                 
-                                Divider().frame(height: 2).background(
-                                    LinearGradient(
-                                        colors: [
-                                            .clear,
-                                            .green.opacity(0.1),
-                                            .green.opacity(0.2),
-                                            .green.opacity(0.3)
-                                        ],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .padding(.trailing, 5)
-                                .padding(.bottom, 15)
+                                LaunchListItemDivider()
+                                    .padding(.bottom, 10)
                             }
                         }
                         .listRowSeparator(.hidden)
@@ -106,6 +81,7 @@ struct LaunchList: View {
             .background(spaceShuttle, alignment: .top)
             .background(Color.background)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .searchable(text: $text, prompt: "Search for launches")
     }
     
@@ -122,7 +98,29 @@ struct LaunchList: View {
     }
 }
 
-// MARK: - Lazy navigation item
+// MARK: - Components
+
+// MARK: Divider
+
+struct LaunchListItemDivider: View {
+    var body: some View {
+        Divider().frame(height: 2).background(
+            LinearGradient(
+                colors: [
+                    .clear,
+                    .green.opacity(0.1),
+                    .green.opacity(0.2),
+                    .green.opacity(0.3)
+                ],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
+        .padding(.trailing, 5)
+    }
+}
+
+// MARK: Lazy navigation item
 
 struct NavigationLazyView<Content: View>: View {
     let build: () -> Content
@@ -138,8 +136,8 @@ struct NavigationLazyView<Content: View>: View {
 
 // MARK: - Data extension
 
-extension LaunchListQuery.Data.Launch.Launch: Hashable, Equatable {
-    public static func == (lhs: LaunchListQuery.Data.Launch.Launch, rhs: LaunchListQuery.Data.Launch.Launch) -> Bool {
+extension LaunchListQuery.Data.LaunchesPast: Hashable, Equatable {
+    public static func == (lhs: LaunchListQuery.Data.LaunchesPast, rhs: LaunchListQuery.Data.LaunchesPast) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -147,6 +145,8 @@ extension LaunchListQuery.Data.Launch.Launch: Hashable, Equatable {
         hasher.combine(id)
     }
 }
+
+// MARK: - Preview
 
 struct LaunchList_Previews: PreviewProvider {
     static var previews: some View {

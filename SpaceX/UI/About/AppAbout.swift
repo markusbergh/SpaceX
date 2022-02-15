@@ -28,7 +28,7 @@ struct AppAbout: View {
             
             It was built totally just for fun and to dive a little into the query language and connecting data with the view layer.
             
-            Made with <3 — 2022
+            Made with <3 in 2022
             """).foregroundColor(.white).font(.system(size: 16, weight: .regular, design: .monospaced))
             
             Spacer()

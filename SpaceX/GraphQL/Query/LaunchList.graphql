@@ -1,14 +1,14 @@
-query LaunchList($pageSize: Int = 20) {
-  launches(pageSize: $pageSize) {
-    cursor
-    hasMore
-    launches {
-      id
-      site
-      mission {
-        name
-        missionPatch(size: SMALL)
-      }
+query LaunchList($pageSize: Int = 20, $offset: Int = 0) {
+  launchesPast(limit: $pageSize, offset: $offset) {
+    id
+    launch_site {
+      site_name
     }
+    mission_name
+    links {
+      mission_patch_small
+    }
+    launch_year
+    launch_date_utc
   }
 }

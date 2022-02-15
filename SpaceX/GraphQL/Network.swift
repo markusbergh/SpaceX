@@ -9,14 +9,14 @@ import Apollo
 import Foundation
 
 protocol NetworkProvider {
-    associatedtype T
-    associatedtype U
+    associatedtype LaunchList
+    associatedtype LaunchDetail
     
     var errorMessage: String { get }
     var urlString: String { get }
     
-    func fetchLaunches(pageSize: Int) async throws -> T
-    func fetchLaunch(with launchID: GraphQLID) async throws -> U
+    func fetchLaunches(pageSize: Int) async throws -> LaunchList
+    func fetchLaunch(with launchID: GraphQLID) async throws -> LaunchDetail
 }
 
 extension NetworkProvider {
@@ -25,7 +25,7 @@ extension NetworkProvider {
     }
 
     var urlString: String {
-        return "https://apollo-fullstack-tutorial.herokuapp.com/graphql"
+        return "https://api.spacex.land/graphql/"
     }
 }
 
