@@ -10,23 +10,25 @@ import SwiftUI
 struct LaunchList: View {
     
     @ObservedObject var viewModel: LaunchListViewModel
+    
+    @State private var text = ""
         
     var body: some View {
         NavigationView {
             VStack(alignment: .leading) {
-                Text("SpaceX")
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.green, .green, .green, .purple],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .font(.system(size: 48, weight: .semibold))
-                    .padding(.top, 20)
-                    .padding(.horizontal, 30)
-
                 List {
+                    Text("SpaceX")
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.green, .green, .green, .purple],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .listRowBackground(Color.clear)
+                        .font(.system(size: 48, weight: .semibold, design: .monospaced))
+                        .padding(.bottom, 20)
+                    
                     ForEach(viewModel.launches.indices, id:\.self) { index in
                         let launch = viewModel.launches[index]
                         let backgroundColor: Color = index % 2 == 0 ? .listItemPrimary : .listItemSecondary
@@ -45,8 +47,7 @@ struct LaunchList: View {
 
                             VStack(alignment: .trailing, spacing: 0) {
                                 Text(Date(), style: .date)
-                                    .font(.footnote)
-                                    .fontWeight(.bold)
+                                    .font(.system(size: 14, weight: .bold, design: .monospaced))
                                     .foregroundColor(.green)
                                     .padding(.trailing, 5)
                                     .padding(.bottom, 5)
@@ -82,7 +83,6 @@ struct LaunchList: View {
                         }
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
-                        .padding(.horizontal, 10)
                     }
                 }
                 .onAppear {
@@ -100,10 +100,13 @@ struct LaunchList: View {
                     }
                 }
             }
-            .navigationBarHidden(true)
+            .padding(.horizontal, 10)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .background(spaceShuttle, alignment: .top)
             .background(Color.background)
         }
+        .searchable(text: $text, prompt: "Search for launches")
     }
     
     private var spaceShuttle: some View {

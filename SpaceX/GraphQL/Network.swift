@@ -8,6 +8,27 @@
 import Apollo
 import Foundation
 
+protocol NetworkProvider {
+    associatedtype T
+    associatedtype U
+    
+    var errorMessage: String { get }
+    var urlString: String { get }
+    
+    func fetchLaunches(pageSize: Int) async throws -> T
+    func fetchLaunch(with launchID: GraphQLID) async throws -> U
+}
+
+extension NetworkProvider {
+    var errorMessage: String {
+        return "Something went wrong!"
+    }
+
+    var urlString: String {
+        return "https://apollo-fullstack-tutorial.herokuapp.com/graphql"
+    }
+}
+
 enum NetworkError: Error {
     case requestError(message: String)
 }
@@ -18,34 +39,33 @@ extension NetworkError: Identifiable {
     }
 }
 
-class Network {
+class Network: NetworkProvider {
     static let shared = Network()
     
-    private var urlString = "https://apollo-fullstack-tutorial.herokuapp.com/graphql"
-    private lazy var apollo = ApolloClient(url: URL(string: urlString)!)
+    private lazy var apollo = ApolloClient(
+        url: URL(string: urlString)!
+    )
 }
 
-// MARK: Public
+// MARK: - NetworkProvider
 
 extension Network {
     
-    /// Will try and fetch all launches. Can throw an error.
+    /// Will try and fetch launches with page size limit. Can throw an error.
     ///
     /// - Parameter pageSize: Number of items in each batch, defaults to `20`.
     func fetchLaunches(pageSize: Int = 20) async throws -> GraphQLResult<LaunchListQuery.Data> {
         try await withCheckedThrowingContinuation { continuation in
             apollo.fetch(query: LaunchListQuery(pageSize: pageSize)) { result in
-                let errorMessage = "Something went wrong!"
-                
                 switch result {
                 case let .success(graphQLResult):
                     guard graphQLResult.errors == nil else {
-                        return continuation.resume(throwing: NetworkError.requestError(message: errorMessage))
+                        return continuation.resume(throwing: NetworkError.requestError(message: self.errorMessage))
                     }
                     
                     continuation.resume(returning: graphQLResult)
                 case .failure:
-                    continuation.resume(throwing: NetworkError.requestError(message: errorMessage))
+                    continuation.resume(throwing: NetworkError.requestError(message: self.errorMessage))
                 }
             }
         }
@@ -57,17 +77,15 @@ extension Network {
     func fetchLaunch(with launchID: GraphQLID) async throws -> GraphQLResult<LaunchDetailsQuery.Data> {
         try await withCheckedThrowingContinuation { continuation in
             apollo.fetch(query: LaunchDetailsQuery(launchId: launchID)) { result in
-                let errorMessage = "Something went wrong!"
-                
                 switch result {
                 case let .success(graphQLResult):
                     guard graphQLResult.errors == nil else {
-                        return continuation.resume(throwing: NetworkError.requestError(message: errorMessage))
+                        return continuation.resume(throwing: NetworkError.requestError(message: self.errorMessage))
                     }
                     
                     continuation.resume(returning: graphQLResult)
                 case .failure:
-                    continuation.resume(throwing: NetworkError.requestError(message: errorMessage))
+                    continuation.resume(throwing: NetworkError.requestError(message: self.errorMessage))
                 }
             }
         }

@@ -15,38 +15,40 @@ struct LaunchListItem: View {
     
     var body: some View {
         HStack {
-            if let missionPatch = missionPatch {
-                AsyncImage(url: URL(string: missionPatch)) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .green))
-                }
-                .colorMultiply(.green)
-                .frame(width: 50, height: 50)
-            } else {
-                Image("NoImage")
-                    .resizable()
-                    .renderingMode(.template)
-                    .foregroundColor(.green)
-                    .frame(width: 25, height: 25)
+            Group {
+                if let missionPatch = missionPatch {
+                    AsyncImage(url: URL(string: missionPatch)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .green))
+                    }
+                    .colorMultiply(.green)
                     .frame(width: 50, height: 50)
-                    .background(Circle())
+                } else {
+                    Image("NoImage")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(.green)
+                        .frame(width: 25, height: 25)
+                        .frame(width: 50, height: 50)
+                        .background(Circle())
+                }
             }
+            .padding(.trailing, 20)
             
             Spacer()
             
             HStack {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(site ?? "No data")
-                        .font(.title2)
-                        .fontWeight(.regular)
+                        .font(.system(size: 20, design: .monospaced))
                         .foregroundColor(.white)
                     
                     Text(missionName ?? "")
+                        .font(.system(size: 12, weight: .heavy, design: .monospaced))
                         .foregroundColor(.white.opacity(0.5))
-                        .font(.caption)
-                        .fontWeight(.heavy)
+                        .multilineTextAlignment(.trailing)
                 }
 
                 Image(systemName: "chevron.right")

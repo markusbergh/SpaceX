@@ -12,10 +12,30 @@ struct ContentView: View {
     @StateObject private var viewModel = LaunchListViewModel()
     
     init() {
-        configure()
+        configureTabBar()
+        configureNavigationBar()
     }
-    
-    private func configure() {
+
+    var body: some View {
+        TabView {
+            LaunchList(viewModel: viewModel)
+                .tabItem {
+                    Label("Launches", systemImage: "paperplane.fill")
+                }
+            
+            AppAbout()
+                .tabItem {
+                    Label("About", systemImage: "cursorarrow.rays")
+                }
+        }
+        .accentColor(.green)
+    }
+}
+
+// MARK: - Appearance
+
+extension ContentView {
+    private func configureTabBar() {
         // Content scrolled under
         let standardAppearance = UITabBarAppearance()
         standardAppearance.configureWithTransparentBackground()
@@ -27,22 +47,18 @@ struct ContentView: View {
         scrollEdgeAppearance.configureWithTransparentBackground()
         UITabBar.appearance().scrollEdgeAppearance = scrollEdgeAppearance
     }
-
-    var body: some View {
-        TabView {
-            LaunchList(viewModel: viewModel)
-                .tabItem {
-                    Label("Launches", systemImage: "paperplane.fill")
-                }
-            
-            VStack {
-                Text("About")
-            }
-            .tabItem {
-                Label("About", systemImage: "cursorarrow.rays")
-            }
-        }
-        .accentColor(.green)
+    
+    private func configureNavigationBar() {
+        // Content scrolled under
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithTransparentBackground()
+        standardAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        UINavigationBar.appearance().standardAppearance = standardAppearance
+        
+        // Nothing is under
+        let scrollEdgeAppearance = UINavigationBarAppearance()
+        scrollEdgeAppearance.configureWithTransparentBackground()
+        UINavigationBar.appearance().scrollEdgeAppearance = scrollEdgeAppearance
     }
 }
 

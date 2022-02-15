@@ -22,36 +22,57 @@ struct LaunchDetail: View {
     }
     
     var body: some View {
-        VStack {
-            HStack(spacing: 15) {
-                if let missionPatch = viewModel.launch?.mission?.missionPatch {
-                    AsyncImage(url: URL(string: missionPatch)) { image in
-                        image.resizable()
-                    } placeholder: {
-                        ProgressView()
-                            .frame(width: 150, height: 150)
+        NavigationView {
+            VStack(alignment: .leading) {
+                Text(viewModel.launch?.site ?? "")
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.green, .green, .green, .purple],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .font(.system(size: 38, weight: .semibold, design: .monospaced))
+                    .padding(.bottom, 20)
+                
+                HStack(spacing: 15) {
+                    if let missionPatch = viewModel.launch?.mission?.missionPatch {
+                        AsyncImage(url: URL(string: missionPatch)) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .green))
+                                .frame(width: 125, height: 125)
+                        }
+                        .frame(width: 125, height: 125)
                     }
-                    .frame(width: 150, height: 150)
+                    
+                    VStack(alignment: .leading) {
+                        if let missionName = viewModel.launch?.mission?.name {
+                            Text(missionName)
+                                .font(.system(size: 19, weight: .regular, design: .monospaced))
+                        }
+                        
+                        if let launchID = launchID {
+                            Text("Launch: \(launchID)")
+                                .font(.system(size: 16, weight: .bold, design: .monospaced))
+                        }
+                        
+                        if let rocketName = viewModel.launch?.rocket?.name,
+                           let rocketType = viewModel.launch?.rocket?.type {
+                            Text("\(rocketName) (\(rocketType))")
+                                .font(.system(size: 16, weight: .regular, design: .monospaced))
+                        }
+                    }
+                    .foregroundColor(.white)
                 }
                 
-                VStack {
-                    if let missionName = viewModel.launch?.mission?.name {
-                        Text(missionName)
-                            .font(.title)
-                    }
-                    
-                    if let launchID = launchID {
-                        Text("Launch: \(launchID)")
-                    }
-                    
-                    if let rocketName = viewModel.launch?.rocket?.name,
-                       let rocketType = viewModel.launch?.rocket?.type {
-                        Text("🚀 \(rocketName) (\(rocketType))")
-                    }
-                }
+                Spacer()
             }
-            
-            Spacer()
+            .padding(.horizontal, 30)
+            .navigationBarTitleDisplayMode(.inline)
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
+            .background(Color.background)
         }
     }
 }
