@@ -46,7 +46,7 @@ struct LaunchDetail: View {
                             )
                         )
                         .font(.system(size: 28, weight: .semibold, design: .monospaced))
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 25)
                 }
                 
                 HStack(spacing: 25) {
@@ -83,7 +83,7 @@ struct LaunchDetail: View {
                     
                     Spacer()
                 }
-                .padding(.bottom, 15)
+                .padding(.bottom, 25)
                 
                 if let description = viewModel.launch?.details {
                     Text(description)

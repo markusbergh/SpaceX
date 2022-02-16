@@ -45,6 +45,7 @@ extension ContentView {
         // Nothing is under
         let scrollEdgeAppearance = UITabBarAppearance()
         scrollEdgeAppearance.configureWithTransparentBackground()
+        scrollEdgeAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
         UITabBar.appearance().scrollEdgeAppearance = scrollEdgeAppearance
     }
     
