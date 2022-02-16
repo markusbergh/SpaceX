@@ -49,7 +49,8 @@ struct LaunchList: View {
                                 LaunchListItem(
                                     missionName: launch.missionName,
                                     missionPatch: launch.links?.missionPatchSmall,
-                                    site: launch.launchSite?.siteName
+                                    site: launch.launchSite?.siteName,
+                                    date: viewModel.formattedDate(for: launch)
                                 )
                                 .padding(.bottom, 20)
                                 

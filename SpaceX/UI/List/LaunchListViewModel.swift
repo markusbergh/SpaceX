@@ -43,6 +43,25 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
         self.network = network
     }
     
+    func formattedDate(for launch: Launch) -> String? {
+        guard let launchDateString = launches.first(where: { launch.id == $0.id })?.launchDateUtc else {
+            return nil
+        }
+        
+        // Cannot use `ISO8601DateFormatter` because of less date style options
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+
+        guard let launchDate = dateFormatter.date(from: launchDateString) else {
+            return nil
+        }
+        
+        // Update date style
+        dateFormatter.dateFormat = "YYYY-MM-dd"
+        
+        return dateFormatter.string(from: launchDate)
+    }
+    
     func dispatch(action: Action) {
         switch action {
         case .fetchLaunches:

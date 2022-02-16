@@ -12,6 +12,7 @@ struct LaunchListItem: View {
     let missionName: String?
     let missionPatch: String?
     let site: String?
+    let date: String?
     
     private var backgroundColor: Color {
         return .listItemPrimary
@@ -27,7 +28,7 @@ struct LaunchListItem: View {
                 
                 HStack {
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text(Date(), style: .date)
+                        Text(date ?? "")
                             .font(.system(size: 12, weight: .bold, design: .monospaced))
                             .foregroundColor(.green)
                             .padding(.bottom, 5)
@@ -106,7 +107,8 @@ struct LaunchListItem_Previews: PreviewProvider {
         LaunchListItem(
             missionName: "Mission name",
             missionPatch: nil,
-            site: "KSC LC 39A"
+            site: "KSC LC 39A",
+            date: "11/11/11"
         )
     }
 }

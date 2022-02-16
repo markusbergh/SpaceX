@@ -29,7 +29,7 @@ class LaunchDetailViewModel: ObservableObject, LaunchDetailProvider {
             return nil
         }
         
-        // Due to limitation with format options using `ISO8601DateFormatter`, a `DateFormatter` is used instead.
+        // Cannot use `ISO8601DateFormatter` because of less date style options
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
