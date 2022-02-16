@@ -17,6 +17,6 @@ extension Color {
     static let listTitleAlternative = Color("ListTitleAlternative")
 
     static let listItemPrimary = Color("ListItemPrimary")
-    static let listItemSecondary = Color("ListItemSecondary")
+    static let listItemNoImage = Color("ListItemNoImage")
     static let listItemDisclosureBackground = Color("ListItemDisclosureBackground")
 }

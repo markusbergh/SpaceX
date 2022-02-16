@@ -8,11 +8,21 @@
 import Foundation
 import Apollo
 
-class LaunchDetailViewModel: ObservableObject {
+typealias LaunchDetails = LaunchDetailsQuery.Data.Launch
+
+protocol LaunchDetailProvider {
+    func fetchLaunch(id: GraphQLID?) async throws -> LaunchDetails
+}
+
+class LaunchDetailViewModel: ObservableObject, LaunchDetailProvider {
+    enum Error: Swift.Error {
+        case fetchDetailsError
+    }
+    
     /// Network layer
     private let network: Network
     
-    @Published private(set) var launch: LaunchDetailsQuery.Data.Launch?
+    @Published private(set) var launch: LaunchDetails?
     
     var formattedDate: String? {
         guard let launchDateString = launch?.launchDateUtc else {
@@ -36,6 +46,24 @@ class LaunchDetailViewModel: ObservableObject {
     init(network: Network = Network.shared) {
         self.network = network
     }
+    
+    func fetchLaunch(id: GraphQLID?) async throws -> LaunchDetails {
+        guard let id = id else {
+            throw Error.fetchDetailsError
+        }
+        
+        do {
+            let graphQLResult = try await network.fetchLaunch(with: id)
+            
+            guard let launch = graphQLResult.data?.launch else {
+                throw Error.fetchDetailsError
+            }
+            
+            return launch
+        } catch {
+            throw error
+        }
+    }
 }
 
 // MARK: - Actions
@@ -48,29 +76,17 @@ extension LaunchDetailViewModel {
     func dispatch(action: Action) {
         switch action {
         case let .fetchLaunch(launchID):
-             fetchLaunch(launchID)
-        }
-    }
-}
-
-// MARK: - Private
-
-extension LaunchDetailViewModel {
-    private func fetchLaunch(_ id: GraphQLID?) {
-        guard let id = id else { return }
-        
-        Task {
-            do {
-                let graphQLResult = try await network.fetchLaunch(with: id)
-                
-                if let launch = graphQLResult.data?.launch {
+            Task {
+                do {
+                    let launch = try await fetchLaunch(id: launchID)
+                    
                     DispatchQueue.main.async {
                         self.launch = launch
                     }
+                } catch {
+                    // TODO: Handle error
+                    assertionFailure("Error while fetching launch details")
                 }
-            } catch let NetworkError.requestError(message: message) {
-                // TODO: Handle error
-                assertionFailure("Unhandled error: \(message)")
             }
         }
     }

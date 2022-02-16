@@ -46,7 +46,7 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
     func dispatch(action: Action) {
         switch action {
         case .fetchLaunches:
-            launches.removeAll()
+            guard launches.isEmpty else { return }
             
             Task {
                 do {
@@ -93,7 +93,7 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
     }
 }
 
-// MARK: Mock
+// MARK: - Mock
 
 class MockLaunchListViewModel: LaunchListViewModel {
     override func fetchLaunches() async throws -> [Launch] {
@@ -134,5 +134,4 @@ class MockLaunchListViewModel: LaunchListViewModel {
         
         return launches
     }
-    
 }

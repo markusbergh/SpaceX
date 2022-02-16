@@ -9,14 +9,14 @@ import Apollo
 import Foundation
 
 protocol NetworkProvider {
-    associatedtype LaunchList
-    associatedtype LaunchDetail
+    associatedtype LaunchListResult
+    associatedtype LaunchDetailResult
     
     var errorMessage: String { get }
     var urlString: String { get }
     
-    func fetchLaunches(pageSize: Int) async throws -> LaunchList
-    func fetchLaunch(with launchID: GraphQLID) async throws -> LaunchDetail
+    func fetchLaunches(pageSize: Int) async throws -> LaunchListResult
+    func fetchLaunch(with launchID: GraphQLID) async throws -> LaunchDetailResult
 }
 
 extension NetworkProvider {

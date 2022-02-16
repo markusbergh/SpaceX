@@ -100,9 +100,9 @@ struct LaunchList: View {
     @ViewBuilder private var overlayView: some View {
         switch viewModel.state {
         case .pending:
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: .green))
-                .frame(width: 50, height: 50)
+            Spinner()
+                // Magic number ✨
+                .offset(y: 50.0)
         case .idle, .error:
             EmptyView()
         }
