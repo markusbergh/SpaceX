@@ -20,6 +20,12 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
         case fetchMore
     }
     
+    enum State {
+        case idle
+        case pending
+        case error(NetworkError)
+    }
+    
     enum Error: Swift.Error {
         case fetchItemsError
     }
@@ -27,8 +33,8 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
     /// Holder of launches data.
     @Published private(set) var launches = [Launch]()
     
-    /// Error that needs handling.
-    @Published var error: NetworkError?
+    /// State that needs handling.
+    @Published var state: State = .idle
     
     /// Network layer
     private let network: Network
@@ -45,13 +51,17 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
             Task {
                 do {
                     let launches = try await fetchLaunches()
-                    
+                                        
                     DispatchQueue.main.async {
                         self.launches.append(contentsOf: launches)
+                        
+                        // All good!
+                        self.state = .idle
                     }
-                } catch let NetworkError.requestError(message: message) {
-                    // TODO: Handle error
-                    assertionFailure("Unhandled error: \(message)")
+                } catch NetworkError.requestError {
+                    DispatchQueue.main.async {
+                        self.state = .error(.requestError(message: "Something went wrong while fetching data."))
+                    }
                 }
             }
         case .fetchMore:
@@ -63,6 +73,10 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
     func fetchLaunches() async throws -> [Launch] {
         guard launches.isEmpty else {
             throw Error.fetchItemsError
+        }
+        
+        DispatchQueue.main.async {
+            self.state = .pending
         }
         
         do {

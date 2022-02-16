@@ -23,17 +23,30 @@ struct LaunchDetail: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading) {
-                Text(viewModel.launch?.launchSite?.siteName ?? "")
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.green, .green, .green, .purple],
-                            startPoint: .leading,
-                            endPoint: .trailing
+            VStack(alignment: .leading, spacing: 0) {
+                if let formattedDate = viewModel.formattedDate {
+                    Text("Launch date: \(formattedDate)")
+                        .foregroundColor(.white)
+                        .textCase(.uppercase)
+                        .font(.system(size: 12, weight: .regular, design: .monospaced))
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(Capsule().fill(.green))
+                        .padding(.bottom, 10)
+                }
+
+                if let missionName = viewModel.launch?.missionName {
+                    Text(missionName)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.green, .green, .green, .purple],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
-                    )
-                    .font(.system(size: 38, weight: .semibold, design: .monospaced))
-                    .padding(.bottom, 20)
+                        .font(.system(size: 32, weight: .semibold, design: .monospaced))
+                        .padding(.bottom, 20)
+                }
                 
                 HStack(spacing: 25) {
                     if let missionPatch = viewModel.launch?.links?.missionPatch {
@@ -47,24 +60,34 @@ struct LaunchDetail: View {
                         .frame(width: 125, height: 125)
                     }
                     
-                    VStack(alignment: .leading) {
-                        if let missionName = viewModel.launch?.missionName {
-                            Text(missionName)
-                                .font(.system(size: 19, weight: .regular, design: .monospaced))
+                    VStack(alignment: .leading, spacing: 5) {
+                        if let siteName = viewModel.launch?.launchSite?.siteName {
+                            Text(siteName)
                         }
                         
                         if let launchID = launchID {
                             Text("Launch: \(launchID)")
-                                .font(.system(size: 16, weight: .bold, design: .monospaced))
+                                .fontWeight(.bold)
                         }
                         
                         if let rocketName = viewModel.launch?.rocket?.rocketName,
                            let rocketType = viewModel.launch?.rocket?.rocketType {
                             Text("\(rocketName) (\(rocketType))")
-                                .font(.system(size: 16, weight: .regular, design: .monospaced))
+                        }
+                        
+                        if let siteName = viewModel.launch?.launchSite?.siteName {
+                            Text(siteName)
                         }
                     }
+                    .font(.system(size: 16, weight: .regular, design: .monospaced))
                     .foregroundColor(.white)
+                }
+                .padding(.bottom, 15)
+                
+                if let description = viewModel.launch?.details {
+                    Text(description)
+                        .foregroundColor(.white )
+                        .font(.system(size: 16, weight: .regular, design: .monospaced))
                 }
                 
                 Spacer()

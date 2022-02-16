@@ -12,6 +12,7 @@ struct LaunchList: View {
     @ObservedObject var viewModel: LaunchListViewModel
     
     @State private var text = ""
+    @State private var currentError: NetworkError?
         
     var body: some View {
         NavigationView {
@@ -64,17 +65,27 @@ struct LaunchList: View {
                     viewModel.dispatch(action: .fetchLaunches)
                 }
                 .listStyle(.plain)
-                .alert(item: $viewModel.error) { error in
-                    switch error {
-                    case let .requestError(message):
-                        return Alert(
-                            title: Text("Oops!"),
-                            message: Text(message),
-                            dismissButton: .default(Text("OK"))
-                        )
+                .onReceive(viewModel.$state) { state in
+                    if case let .error(requestError) = state {
+                        currentError = requestError
                     }
                 }
+                .alert(item: $currentError) { currentError in
+                    var errorMessage = "Something went wrong!"
+                    
+                    switch currentError {
+                    case let .requestError(message):
+                        errorMessage = message
+                    }
+                    
+                    return Alert(
+                        title: Text("Oops!"),
+                        message: Text(errorMessage),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
             }
+            .overlay(overlayView)
             .padding(.horizontal, 10)
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
@@ -85,6 +96,19 @@ struct LaunchList: View {
         .searchable(text: $text, prompt: "Search for launches")
     }
     
+    /// Renders a spinner if
+    @ViewBuilder private var overlayView: some View {
+        switch viewModel.state {
+        case .pending:
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .green))
+                .frame(width: 50, height: 50)
+        case .idle, .error:
+            EmptyView()
+        }
+    }
+    
+    /// Rendered in top of list.
     private var spaceShuttle: some View {
         Image("SpaceShuttle")
             .resizable()
