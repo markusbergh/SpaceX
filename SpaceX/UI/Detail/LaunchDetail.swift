@@ -21,80 +21,193 @@ struct LaunchDetail: View {
         viewModel.dispatch(action: .fetchLaunch(launchID: launchID))
     }
     
+    /// Will return placeholder content if currently loading.
+    private var description: String {
+        guard let description = viewModel.launch?.details else {
+            if isLoading {
+                return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan et tortor quis rhoncus. Fusce eu dolor at mi tincidunt faucibus vel nec nulla. Ut posuere vel neque at dignissim. Donec placerat eros at lacus fermentum facilisis. Sed a dui lacinia, rutrum metus vel, ultricies massa. Praesent pellentesque ante sed ultrices bibendum."
+            }
+            
+            return "No description available."
+        }
+        
+        return description
+    }
+    
+    /// Treats `pending` and `idle` as loading.
+    private var isLoading: Bool {
+        return viewModel.state == .pending || viewModel.state == .idle
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                if let formattedDate = viewModel.formattedDate {
-                    Text("Launch date: \(formattedDate)")
-                        .foregroundColor(.white)
-                        .textCase(.uppercase)
-                        .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 10)
-                        .background(Capsule().fill(.green))
-                        .padding(.top, 50)
-                        .padding(.bottom, 10)
-                }
-
-                if let missionName = viewModel.launch?.missionName {
-                    Text(missionName)
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [.green, .green, .green, .purple],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
+                Text(viewModel.launch?.missionName ?? "No mission with a really long name loaded")
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.green, .green, .green, .purple],
+                            startPoint: .leading,
+                            endPoint: .trailing
                         )
-                        .font(.system(size: 28, weight: .semibold, design: .monospaced))
-                        .padding(.bottom, 25)
-                }
+                    )
+                    .font(.system(size: 36, weight: .semibold, design: .monospaced))
+                    .padding(.top, 25)
+                    .padding(.bottom, 15)
+                    .redacted(reason: isLoading ? .placeholder : [])
                 
+                Text("Launch: \(viewModel.formattedDate ?? "No loaded date")")
+                    .foregroundColor(.white)
+                    .textCase(.uppercase)
+                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .background(Capsule().fill(.green))
+                    .padding(.bottom, 25)
+                    .redacted(reason: isLoading ? .placeholder : [])
+            
                 HStack(spacing: 25) {
-                    if let missionPatch = viewModel.launch?.links?.missionPatch {
-                        AsyncImage(url: URL(string: missionPatch)) { image in
-                            image.resizable()
-                        } placeholder: {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .green))
-                                .frame(width: 125, height: 125)
-                                .background(Color.listItemPrimary)
-                                .clipShape(Circle())
+                    Group {
+                        if let missionPatch = viewModel.launch?.links?.missionPatch {
+                            let imageTransaction = Transaction(animation: .linear)
+                            let imageUrl = URL(string: missionPatch)
+                            
+                            AsyncImage(url: imageUrl, transaction: imageTransaction) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .green))
+                                        .frame(width: 125, height: 125)
+                                        .background(Color.listItemPrimary)
+                                        .clipShape(Circle())
+                                case let .success(image):
+                                    image
+                                        .resizable()
+                                        .frame(width: 125, height: 125)
+                                case .failure:
+                                    Image("NoImage")
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .frame(width: 125, height: 125)
+                                        .background(Color.listItemPrimary)
+                                        .clipShape(Circle())
+                                @unknown default:
+                                    fatalError("Unhandled phase")
+                                }
+                            }
+                        } else {
+                            if !isLoading {
+                                Image("NoImage")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .frame(width: 125, height: 125)
+                                    .background(Color.listItemPrimary)
+                                    .clipShape(Circle())
+                            } else {
+                                Circle()
+                                    .fill(Color.listItemPrimary)
+                                    .frame(width: 125, height: 125)
+                            }
                         }
-                        .frame(width: 125, height: 125)
                     }
-                    
+
                     VStack(alignment: .leading, spacing: 5) {
-                        if let siteName = viewModel.launch?.launchSite?.siteName {
-                            Text(siteName)
-                        }
+                        Text(viewModel.launch?.launchSite?.siteName ?? "No loaded site name")
                         
-                        if let launchID = launchID {
-                            Text("Launch: \(launchID)")
-                                .fontWeight(.bold)
-                        }
+                        Text("Launch: \(launchID ?? "No loaded launch id")")
+                            .fontWeight(.bold)
                         
-                        if let rocketName = viewModel.launch?.rocket?.rocketName,
-                           let rocketType = viewModel.launch?.rocket?.rocketType {
-                            Text("\(rocketName) (\(rocketType))")
-                        }
+                        let rocketName = viewModel.launch?.rocket?.rocketName ?? "No loaded rocket name"
+                        let rocketType = viewModel.launch?.rocket?.rocketType ?? "No loaded rocket type"
+                        
+                        Text("\(rocketName) (\(rocketType))")
                     }
                     .font(.system(size: 16, weight: .regular, design: .monospaced))
                     .foregroundColor(.white)
+                    .redacted(reason: isLoading ? .placeholder : [])
                     
                     Spacer()
                 }
                 .padding(.bottom, 25)
                 
-                if let description = viewModel.launch?.details {
-                    Text(description)
-                        .foregroundColor(.white )
-                        .font(.system(size: 16, weight: .regular, design: .monospaced))
+                VStack(alignment: .leading) {
+                    Text("Rocket specifications")
+                        .foregroundColor(.white)
+                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                        .padding(.bottom, 5)
+                        .redacted(reason: isLoading ? .placeholder : [])
+                    
+                    HStack {
+                        HStack {
+                            Image(systemName: "arrow.up.backward.and.arrow.down.forward")
+                            
+                            VStack(alignment: .leading) {
+                                Text("Diameter")
+                                    .font(.system(size: 10, weight: .regular, design: .monospaced))
+
+                                Text("\(viewModel.rocketDiameter ?? "Unknown")")
+                            }
+                            .foregroundColor(.green)
+                        }
+                        
+                        Spacer()
+                        
+                        HStack {
+                            Image(systemName: "arrow.up.and.down")
+
+                            VStack(alignment: .leading) {
+                                Text("Height")
+                                    .font(.system(size: 10, weight: .regular, design: .monospaced))
+
+                                Text("\(viewModel.rocketHeight ?? "Unknown")")
+                            }
+                            .foregroundColor(.green)
+                        }
+                        
+                        Spacer()
+                        
+                        HStack {
+                            Image(systemName: "scalemass")
+                            
+                            VStack(alignment: .leading) {
+                                Text("Mass")
+                                    .font(.system(size: 10, weight: .regular, design: .monospaced))
+
+                                Text("\(viewModel.rocketMass ?? "Unknown")")
+                            }
+                            .foregroundColor(.green)
+                        }
+                    }
+                    .foregroundColor(.white )
+                    .font(.system(size: 14, weight: .regular, design: .monospaced))
+                    .redacted(reason: isLoading ? .placeholder : [])
                 }
+                .padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8.0)
+                        .stroke(.white.opacity(0.05), lineWidth: 1.0)
+                        .background(Color.white.opacity(0.05).cornerRadius(8.0))
+                )
+                .padding(.bottom, 25)
+                
+                Text(description)
+                    .lineSpacing(2.5)
+                    .foregroundColor(.white )
+                    .font(.system(size: 16, weight: .regular, design: .monospaced))
+                    .padding(.bottom, 30)
+                    .redacted(reason: isLoading ? .placeholder : [])
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
             .padding(.horizontal, 30)
         }
+        .background(
+            LinearGradient(
+                colors: [.black, .background],
+                startPoint: .top,
+                endPoint: .bottom
+            ).frame(height: 300).ignoresSafeArea(),
+            alignment: .top
+        )
         .background(Color.background)
     }
 }

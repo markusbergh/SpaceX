@@ -24,9 +24,9 @@ struct AppAbout: View {
             Text("""
             This is a tiny demo app to evaluate and learn some about using GraphQL on iOS.
             
-            It uses [Apollo Client for iOS](https://www.apollographql.com/docs/ios/) to fetch (fake) data of SpaceX launches from a spec-compliant GraphQL server.
+            It uses [Apollo Client](https://www.apollographql.com/docs/ios/) for iOS to fetch data of SpaceX launches from a spec-compliant GraphQL server.
             
-            It was built totally just for fun and to dive a little into the query language and connecting data with the view layer.
+            It was totally built just for fun and to dive a little into the query language and connecting the data with the view layer.
             
             Made with <3 in 2022
             """).foregroundColor(.white).font(.system(size: 16, weight: .regular, design: .monospaced))

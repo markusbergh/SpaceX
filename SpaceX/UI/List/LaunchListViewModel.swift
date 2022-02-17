@@ -30,7 +30,7 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
         case fetchItemsError
     }
     
-    /// Holder of launches data.
+    /// Holder of launch data.
     @Published private(set) var launches = [Launch]()
     
     /// State that needs handling.

@@ -11,7 +11,7 @@ struct LaunchList: View {
     
     @ObservedObject var viewModel: LaunchListViewModel
     
-    @State private var text = ""
+    @State private var searchText = ""
     @State private var currentError: NetworkError?
         
     var body: some View {
@@ -26,13 +26,12 @@ struct LaunchList: View {
                                 endPoint: .trailing
                             )
                         )
+                        .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
                         .font(.system(size: 48, weight: .semibold, design: .monospaced))
                         .padding(.bottom, 20)
                     
-                    ForEach(viewModel.launches.indices, id:\.self) { index in
-                        let launch = viewModel.launches[index]
-                        
+                    ForEach(listItems, id:\.self) { launch in
                         ZStack {
                             NavigationLink(
                                 destination: NavigationLazyView(
@@ -65,7 +64,6 @@ struct LaunchList: View {
                 .onAppear {
                     viewModel.dispatch(action: .fetchLaunches)
                 }
-                .listStyle(.plain)
                 .onReceive(viewModel.$state) { state in
                     if case let .error(requestError) = state {
                         currentError = requestError
@@ -85,19 +83,30 @@ struct LaunchList: View {
                         dismissButton: .default(Text("OK"))
                     )
                 }
+                .listStyle(.plain)
             }
             .overlay(overlayView)
-            .padding(.horizontal, 10)
-            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .background(spaceShuttle, alignment: .top)
             .background(Color.background)
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .searchable(text: $text, prompt: "Search for launches")
+        .searchable(text: $searchText, prompt: "Search for launches")
     }
     
-    /// Renders a spinner if
+    /// Returns list content, can be filtered.
+    private var listItems: [Launch] {
+        if searchText.isEmpty {
+            return viewModel.launches
+        } else {
+            return viewModel.launches.filter {
+                ($0.missionName?.localizedCaseInsensitiveContains(searchText) ?? false)
+                || ($0.launchSite?.siteName?.localizedCaseInsensitiveContains(searchText) ?? false)
+            }
+        }
+    }
+    
+    /// Renders a spinner if needed.
     @ViewBuilder private var overlayView: some View {
         switch viewModel.state {
         case .pending:

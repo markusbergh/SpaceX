@@ -8,6 +8,17 @@ query LaunchDetails($launchId: ID!) {
     rocket {
       rocket_name
       rocket_type
+      rocket {
+        height {
+          meters
+        }
+        mass {
+          kg
+        }
+        diameter {
+          meters
+        }
+      }
     }
     details
     links {
