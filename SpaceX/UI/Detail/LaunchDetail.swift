@@ -59,7 +59,6 @@ struct LaunchDetail: View {
                     .font(.system(size: 36, weight: .semibold, design: .monospaced))
                     .padding(.top, 25)
                     .padding(.bottom, 15)
-                    .redacted(reason: isLoading ? .placeholder : [])
                 
                 Text("Launch: \(viewModel.formattedDate ?? "No loaded date")")
                     .foregroundColor(.white)
