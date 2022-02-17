@@ -1,16 +1,16 @@
 //
-//  AppAbout.swift
+//  SavedLaunches.swift
 //  SpaceX
 //
-//  Created by Markus Bergh on 2022-02-14.
+//  Created by Markus Bergh on 2022-02-17.
 //
 
 import SwiftUI
 
-struct AppAbout: View {
+struct SavedLaunches: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text("About")
+            Text("Saved")
                 .foregroundStyle(
                     LinearGradient(
                         colors: [.green, .green, .green, .purple],
@@ -21,20 +21,22 @@ struct AppAbout: View {
                 .font(.system(size: 48, weight: .semibold, design: .monospaced))
                 .padding(.top, 50)
             
-            Text("""
-            This is a tiny demo app to evaluate and learn some about using GraphQL on iOS.
-            
-            It uses [Apollo Client](https://www.apollographql.com/docs/ios/) for iOS to fetch data of SpaceX launches from a spec-compliant GraphQL server.
-            
-            It was totally built just for fun and to dive a little into the query language and connecting the data with the view layer.
-            
-            Made with <3 in 2022
-            """).foregroundColor(.white).font(.system(size: 16, weight: .regular, design: .monospaced))
-            
             Spacer()
         }
         .padding(.horizontal, 20)
         .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
+        .overlay(
+            Text("You have no saved launches")
+                .foregroundColor(.white)
+                .font(.system(size: 16, weight: .regular, design: .monospaced))
+        )
+        .background(
+            Image("NoImage")
+                .resizable()
+                .renderingMode(.template)
+                .foregroundColor(.white.opacity(0.05))
+                .frame(width: 175, height: 175)
+        )
         .background(
             LinearGradient(
                 colors: [.black, .background],
@@ -46,3 +48,4 @@ struct AppAbout: View {
         .background(Color.background)
     }
 }
+

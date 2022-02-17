@@ -74,7 +74,7 @@ class LaunchDetailViewModel: ObservableObject, LaunchDetailProvider {
             return nil
         }
         
-        return "\(round(Double(mass) / 1000)) ton"
+        return "\(Int(round(Double(mass) / 1000))) tons"
     }
     
     init(network: Network = Network.shared) {
@@ -104,7 +104,7 @@ class LaunchDetailViewModel: ObservableObject, LaunchDetailProvider {
 
 extension LaunchDetailViewModel {
     enum Action {
-        case fetchLaunch(launchID: GraphQLID?)
+        case fetchLaunch(id: GraphQLID?)
     }
 
     func dispatch(action: Action) {

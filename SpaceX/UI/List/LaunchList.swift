@@ -31,12 +31,13 @@ struct LaunchList: View {
                         .font(.system(size: 48, weight: .semibold, design: .monospaced))
                         .padding(.bottom, 20)
                     
-                    ForEach(listItems, id:\.self) { launch in
+                    ForEach(listItems, id:\.id) { launch in                       
                         ZStack {
                             NavigationLink(
                                 destination: NavigationLazyView(
                                     LaunchDetail(
-                                        launchID: launch.id ?? "",
+                                        id: launch.id,
+                                        missionName: launch.missionName ?? "No mission name",
                                         viewModel: LaunchDetailViewModel()
                                     )
                                 )

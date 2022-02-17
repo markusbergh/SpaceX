@@ -94,7 +94,7 @@ struct LaunchListItemImage: View {
                     .resizable()
                     .renderingMode(.template)
                     .foregroundColor(.green)
-                    .frame(width: 25, height: 25)
+                    .frame(width: 30, height: 30)
                     .frame(width: 50, height: 50)
                     .background(Circle().fill(Color.listItemNoImage))
             }

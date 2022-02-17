@@ -14,6 +14,7 @@ struct ContentView: View {
     init() {
         configureTabBar()
         configureNavigationBar()
+        configureSearchBar()
     }
 
     var body: some View {
@@ -21,6 +22,11 @@ struct ContentView: View {
             LaunchList(viewModel: viewModel)
                 .tabItem {
                     Label("Launches", systemImage: "paperplane.fill")
+                }
+            
+            SavedLaunches()
+                .tabItem {
+                    Label("Saved", systemImage: "text.badge.star")
                 }
             
             AppAbout()
@@ -61,6 +67,10 @@ extension ContentView {
         scrollEdgeAppearance.configureWithTransparentBackground()
         scrollEdgeAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         UINavigationBar.appearance().scrollEdgeAppearance = scrollEdgeAppearance
+    }
+    
+    private func configureSearchBar() {
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.green]
     }
 }
 
