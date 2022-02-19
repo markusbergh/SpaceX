@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C08E325827BC0A1800F02453 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E325727BC0A1800F02453 /* API.swift */; };
 		C09AE13127BAD2BD0097B069 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09AE13027BAD2BD0097B069 /* Color+Extension.swift */; };
 		C09DF06527BED12F0081979A /* LaunchDetailRocketSpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09DF06427BED12F0081979A /* LaunchDetailRocketSpecification.swift */; };
 		C09DF06827BED54A0081979A /* SavedLaunches.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09DF06727BED54A0081979A /* SavedLaunches.swift */; };
+		C09EDD7B27C0F49C00A4B4CA /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09EDD7A27C0F49C00A4B4CA /* API.swift */; };
+		C09EDD7D27C0FB8700A4B4CA /* SavedLaunchesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09EDD7C27C0FB8700A4B4CA /* SavedLaunchesViewModel.swift */; };
 		C0CB55DF27BA917E00DE1EB2 /* LaunchListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CB55DE27BA917E00DE1EB2 /* LaunchListItem.swift */; };
 		C0D9F3F127BB128D0042BE27 /* AppAbout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D9F3F027BB128D0042BE27 /* AppAbout.swift */; };
 		C0DE057027BDAF3A00A34CFE /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE056F27BDAF3A00A34CFE /* Spinner.swift */; };
@@ -31,10 +32,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C08E325727BC0A1800F02453 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		C09AE13027BAD2BD0097B069 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		C09DF06427BED12F0081979A /* LaunchDetailRocketSpecification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailRocketSpecification.swift; sourceTree = "<group>"; };
 		C09DF06727BED54A0081979A /* SavedLaunches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedLaunches.swift; sourceTree = "<group>"; };
+		C09EDD7A27C0F49C00A4B4CA /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		C09EDD7C27C0FB8700A4B4CA /* SavedLaunchesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedLaunchesViewModel.swift; sourceTree = "<group>"; };
 		C0CB55DE27BA917E00DE1EB2 /* LaunchListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchListItem.swift; sourceTree = "<group>"; };
 		C0D9F3F027BB128D0042BE27 /* AppAbout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAbout.swift; sourceTree = "<group>"; };
 		C0DE056F27BDAF3A00A34CFE /* Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				C09DF06727BED54A0081979A /* SavedLaunches.swift */,
+				C09EDD7C27C0FB8700A4B4CA /* SavedLaunchesViewModel.swift */,
 			);
 			path = Saved;
 			sourceTree = "<group>";
@@ -146,7 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E63C2A27B9B0A50033B879 /* Query */,
-				C08E325727BC0A1800F02453 /* API.swift */,
+				C09EDD7A27C0F49C00A4B4CA /* API.swift */,
 				C0E63C2927B9B0A50033B879 /* Schema.json */,
 				C0E63C3127B9B2590033B879 /* Network.swift */,
 			);
@@ -266,13 +269,13 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/GraphQL/Query/*.graphql",
+				"$(SRCROOT)/${TARGET_NAME}/GraphQL/Query/*.graphql",
 			);
 			name = Apollo;
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SRCROOT)/GraphQL/API.swift",
+				"$(SRCROOT)/${TARGET_NAME}/GraphQL/API.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -289,15 +292,16 @@
 				C0E63C3627B9B33B0033B879 /* LaunchList.swift in Sources */,
 				C0CB55DF27BA917E00DE1EB2 /* LaunchListItem.swift in Sources */,
 				C09AE13127BAD2BD0097B069 /* Color+Extension.swift in Sources */,
+				C09EDD7B27C0F49C00A4B4CA /* API.swift in Sources */,
 				C0DE057027BDAF3A00A34CFE /* Spinner.swift in Sources */,
 				C09DF06527BED12F0081979A /* LaunchDetailRocketSpecification.swift in Sources */,
 				C0E63C0F27B9ABD30033B879 /* ContentView.swift in Sources */,
 				C0D9F3F127BB128D0042BE27 /* AppAbout.swift in Sources */,
+				C09EDD7D27C0FB8700A4B4CA /* SavedLaunchesViewModel.swift in Sources */,
 				C0E63C3227B9B2590033B879 /* Network.swift in Sources */,
 				C0E63C0D27B9ABD30033B879 /* SpaceXApp.swift in Sources */,
 				C0E17A4727BAEAF300F2AA60 /* View+Extension.swift in Sources */,
 				C0E63C3D27B9C3870033B879 /* LaunchDetail.swift in Sources */,
-				C08E325827BC0A1800F02453 /* API.swift in Sources */,
 				C09DF06827BED54A0081979A /* SavedLaunches.swift in Sources */,
 				C0E63C3927B9B5140033B879 /* LaunchListViewModel.swift in Sources */,
 			);

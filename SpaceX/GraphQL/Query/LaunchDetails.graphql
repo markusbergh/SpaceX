@@ -1,5 +1,6 @@
 query LaunchDetails($launchId: ID!) {
   launch(id: $launchId) {
+    id
     launch_site {
       site_name
     }

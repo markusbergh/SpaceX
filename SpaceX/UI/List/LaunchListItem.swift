@@ -78,26 +78,41 @@ struct LaunchListItem: View {
 struct LaunchListItemImage: View {
     let missionPatch: String?
     
+    private let imageTransaction = Transaction(animation: .linear)
+    
     var body: some View {
-        Group {
-            if let missionPatch = missionPatch {
-                AsyncImage(url: URL(string: missionPatch)) { image in
-                    image.resizable()
-                } placeholder: {
+        if let missionPatch = missionPatch {
+            AsyncImage(url: URL(string: missionPatch), transaction: imageTransaction) { phase in
+                switch phase {
+                case .empty:
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .green))
+                        .frame(width: 50, height: 50)
+                case let .success(image):
+                    image
+                        .resizable()
+                        .colorMultiply(.green)
+                        .frame(width: 50, height: 50)
+                case .failure:
+                    Image("NoImage")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(.green)
+                        .frame(width: 30, height: 30)
+                        .frame(width: 50, height: 50)
+                        .background(Circle().fill(Color.listItemNoImage))
+                @unknown default:
+                    fatalError("Unhandled phase")
                 }
-                .colorMultiply(.green)
-                .frame(width: 50, height: 50)
-            } else {
-                Image("NoImage")
-                    .resizable()
-                    .renderingMode(.template)
-                    .foregroundColor(.green)
-                    .frame(width: 30, height: 30)
-                    .frame(width: 50, height: 50)
-                    .background(Circle().fill(Color.listItemNoImage))
             }
+        } else {
+            Image("NoImage")
+                .resizable()
+                .renderingMode(.template)
+                .foregroundColor(.green)
+                .frame(width: 30, height: 30)
+                .frame(width: 50, height: 50)
+                .background(Circle().fill(Color.listItemNoImage))
         }
     }
 }

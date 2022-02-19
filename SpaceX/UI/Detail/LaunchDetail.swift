@@ -185,6 +185,18 @@ struct LaunchDetail: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
             .padding(.horizontal, 30)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        viewModel.toggleSave()
+                    }) {
+                        HStack {
+                            Image(systemName: viewModel.isSaved ? "heart.fill" : "heart")
+                        }
+                        .transition(.opacity)
+                    }
+                }
+            }
         }
         .background(
             LinearGradient(
