@@ -37,15 +37,6 @@ struct SavedLaunches: View {
                 .foregroundColor(.white.opacity(0.05))
                 .frame(width: 175, height: 175)
         )
-        .background(
-            LinearGradient(
-                colors: [.black, .background],
-                startPoint: .top,
-                endPoint: .bottom
-            ).frame(height: 300).ignoresSafeArea(),
-            alignment: .top
-        )
-        .background(Color.background)
     }
 }
 

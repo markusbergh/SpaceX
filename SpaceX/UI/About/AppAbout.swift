@@ -35,14 +35,5 @@ struct AppAbout: View {
         }
         .padding(.horizontal, 20)
         .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
-        .background(
-            LinearGradient(
-                colors: [.black, .background],
-                startPoint: .top,
-                endPoint: .bottom
-            ).frame(height: 300).ignoresSafeArea(),
-            alignment: .top
-        )
-        .background(Color.background)
     }
 }
