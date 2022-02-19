@@ -16,6 +16,7 @@ protocol LaunchListProvider {
 
 class LaunchListViewModel: ObservableObject, LaunchListProvider {
     enum Action {
+        case cancel
         case fetchLaunches
         case fetchMore
     }
@@ -38,6 +39,9 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
     
     /// Network layer
     private let network: Network
+    
+    /// Cancellable task
+    private var cancellable: Task<Void, Swift.Error>?
     
     init(network: Network = Network.shared) {
         self.network = network
@@ -67,7 +71,7 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
         case .fetchLaunches:
             guard launches.isEmpty else { return }
             
-            Task {
+            cancellable = Task { () throws in
                 do {
                     let launches = try await fetchLaunches()
                                         
@@ -86,6 +90,8 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
         case .fetchMore:
             // TODO: Handle
             break
+        case .cancel:
+            cancellable?.cancel()
         }
     }
     

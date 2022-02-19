@@ -65,6 +65,9 @@ struct LaunchList: View {
                 .onAppear {
                     viewModel.dispatch(action: .fetchLaunches)
                 }
+                .onDisappear {
+                    viewModel.dispatch(action: .cancel)
+                }
                 .onReceive(viewModel.$state) { state in
                     if case let .error(requestError) = state {
                         currentError = requestError
@@ -76,6 +79,8 @@ struct LaunchList: View {
                     switch currentError {
                     case let .requestError(message):
                         errorMessage = message
+                    case .interrupted:
+                        break
                     }
                     
                     return Alert(

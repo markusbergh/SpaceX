@@ -31,6 +31,7 @@ extension NetworkProvider {
 
 enum NetworkError: Error {
     case requestError(message: String)
+    case interrupted
 }
 
 extension NetworkError: Identifiable {
@@ -56,6 +57,8 @@ extension Network {
     /// - Parameter pageSize: Number of items in each batch, defaults to `20`.
     func fetchLaunches(pageSize: Int = 20) async throws -> GraphQLResult<LaunchListQuery.Data> {
         try await withCheckedThrowingContinuation { continuation in
+            if Task.isCancelled { continuation.resume(throwing: NetworkError.interrupted) }
+            
             apollo.fetch(query: LaunchListQuery(pageSize: pageSize)) { result in
                 switch result {
                 case let .success(graphQLResult):
