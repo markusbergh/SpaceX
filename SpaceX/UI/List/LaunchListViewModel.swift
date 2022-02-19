@@ -71,6 +71,10 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
         case .fetchLaunches:
             guard launches.isEmpty else { return }
             
+            DispatchQueue.main.async {
+                self.state = .pending
+            }
+            
             cancellable = Task { () throws in
                 do {
                     let launches = try await fetchLaunches()
@@ -96,14 +100,12 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
     }
     
     func fetchLaunches() async throws -> [Launch] {
+        try await Task.sleep(nanoseconds: UInt64(Double(NSEC_PER_SEC) * 1.5))
+        
         guard launches.isEmpty else {
             throw Error.fetchItemsError
         }
-        
-        DispatchQueue.main.async {
-            self.state = .pending
-        }
-        
+                
         do {
             let graphQLResult = try await network.fetchLaunches(pageSize: 15)
             
