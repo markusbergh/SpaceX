@@ -35,5 +35,13 @@ struct AppAbout: View {
         }
         .padding(.horizontal, 20)
         .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
+        .background(
+            Image("Planet")
+                .resizable()
+                .renderingMode(.template)
+                .foregroundColor(.white.opacity(0.05))
+                .frame(width: 175, height: 175)
+                .offset(y: 190)
+        )
     }
 }

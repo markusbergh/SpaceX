@@ -133,7 +133,7 @@ struct LaunchList: View {
             .colorMultiply(Color.background)
             .scaledToFit()
             .frame(width: UIScreen.main.bounds.width * 2)
-            .offset(y: -185)
+            .offset(y: -215)
             .ignoresSafeArea()
     }
 }
