@@ -188,7 +188,7 @@ struct LaunchDetail: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        viewModel.toggleSave()
+                        viewModel.dispatch(action: .toggleSave)
                     }) {
                         HStack {
                             Image(systemName: viewModel.isSaved ? "heart.fill" : "heart")

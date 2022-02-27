@@ -34,7 +34,7 @@ class LaunchDetailViewModel: ObservableObject, LaunchDetailProvider {
     /// Current launch detail
     @Published private(set) var launch: LaunchDetails? {
         didSet {
-            isLaunchSaved()
+            checkSavedStatus()
         }
     }
     
@@ -122,47 +122,106 @@ class LaunchDetailViewModel: ObservableObject, LaunchDetailProvider {
 // MARK: Save favourite
 
 extension LaunchDetailViewModel {
-    func isLaunchSaved() {
-        guard let jsonValue = launch?.id?.jsonValue else { return }
+    
+    private var savedLaunchesDefaultsKey: String {
+        return "com.marber.SpaceX.saved-launches"
+    }
+    
+    /// Will check if current launch is previously saved.
+    func checkSavedStatus() {
+        guard let launch = launch else { return }
         
         do {
-            let id = try String(jsonValue: jsonValue)
-            
-            withAnimation {
-                isSaved = UserDefaults.standard.object(forKey: id) != nil
+            guard let previousSavedLaunches = UserDefaults.standard.array(forKey: savedLaunchesDefaultsKey) as? [Data] else {
+                return
+            }
+
+            try previousSavedLaunches.forEach { data in
+                guard let jsonObject = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? JSONObject else {
+                    return
+                }
+                
+                try withAnimation {
+                    isSaved = try LaunchDetails(jsonObject: jsonObject).id == launch.id
+                }
             }
         } catch {
             isSaved = false
         }
     }
     
-    func toggleSave() {
-        guard let launch = launch, let jsonValue = launch.id?.jsonValue else { return }
-
-        guard !isSaved else {
-            do {
-                let id = try String(jsonValue: jsonValue)
-    
-                UserDefaults.standard.removeObject(forKey: id)
-                
-                isSaved = false
-            } catch {
-                // TODO: Handle error
-            }
-            
-            return
+    /// Will either save or unsave a launch from user defaults.
+    private func toggleSave() {
+        guard let launch = launch else { return }
+        
+        if isSaved {
+            save(launch: launch)
+        } else {
+            unsave(launch: launch)
         }
-                
+    }
+    
+    /// Will save a launch from user defaults.
+    ///
+    /// - Parameter launch: The actual launch to save.
+    private func save(launch: LaunchDetails) {
         do {
-            let id = try String(jsonValue: jsonValue)
             let encodedLaunch = try NSKeyedArchiver.archivedData(withRootObject: launch.jsonObject, requiringSecureCoding: false)
             
-            UserDefaults.standard.set(encodedLaunch, forKey: id)
-            
+            if var previousSavedLaunches = UserDefaults.standard.array(forKey: savedLaunchesDefaultsKey) as? [Data] {
+                previousSavedLaunches.append(encodedLaunch)
+                
+                UserDefaults.standard.set(previousSavedLaunches, forKey: savedLaunchesDefaultsKey)
+            } else {
+                // No previous list, just save the item
+                UserDefaults.standard.set([encodedLaunch], forKey: savedLaunchesDefaultsKey)
+            }
+                        
             isSaved = true
         } catch {
             // TODO: Handle error
         }
+    }
+    
+    /// Will unsave a launch from user defaults.
+    ///
+    /// - Parameter launch: The actual launch to unsave.
+    private func unsave(launch: LaunchDetails) {
+        do {
+            guard let previousSavedLaunches = UserDefaults.standard.array(forKey: savedLaunchesDefaultsKey) as? [Data] else {
+                return
+            }
+            
+            // Remove any matches
+            let savedLaunches = try previousSavedLaunches.filter { data in
+                let decodedLaunch = try decodedLaunch(for: data)
+                
+                if decodedLaunch?.id == launch.id {
+                    return false
+                }
+                
+                return true
+            }
+
+            // Update list
+            UserDefaults.standard.set(savedLaunches, forKey: savedLaunchesDefaultsKey)
+            
+            isSaved = false
+        } catch {
+            // TODO: Handle error
+        }
+    }
+    
+    /// Will decode `Data` into `LaunchDetails` object.
+    ///
+    /// - Parameter data: Data holding launch details
+    /// - Returns: An optional `LaunchDetails`.
+    private func decodedLaunch(for data: Data) throws -> LaunchDetails? {
+        guard let jsonObject = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? JSONObject else {
+            return nil
+        }
+        
+        return try LaunchDetails(jsonObject: jsonObject)
     }
 }
 
@@ -170,17 +229,18 @@ extension LaunchDetailViewModel {
 
 extension LaunchDetailViewModel {
     enum Action {
+        case toggleSave
         case fetchLaunch(id: GraphQLID?)
     }
 
     func dispatch(action: Action) {
         switch action {
-        case let .fetchLaunch(launchID):
+        case let .fetchLaunch(id):
             state = .pending
 
             Task {
                 do {
-                    let launch = try await fetchLaunch(id: launchID)
+                    let launch = try await fetchLaunch(id: id)
                     
                     DispatchQueue.main.async {
                         self.launch = launch
@@ -191,6 +251,8 @@ extension LaunchDetailViewModel {
                     assertionFailure("Error while fetching launch details")
                 }
             }
+        case .toggleSave:
+            toggleSave()
         }
     }
 }
