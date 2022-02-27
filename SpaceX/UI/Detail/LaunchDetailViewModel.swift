@@ -141,8 +141,12 @@ extension LaunchDetailViewModel {
                     return
                 }
                 
-                try withAnimation {
-                    isSaved = try LaunchDetails(jsonObject: jsonObject).id == launch.id
+                if try LaunchDetails(jsonObject: jsonObject).id == launch.id {
+                    withAnimation {
+                        isSaved = true
+                    }
+                    
+                    return
                 }
             }
         } catch {
@@ -154,7 +158,7 @@ extension LaunchDetailViewModel {
     private func toggleSave() {
         guard let launch = launch else { return }
         
-        if isSaved {
+        if !isSaved {
             save(launch: launch)
         } else {
             unsave(launch: launch)
@@ -169,6 +173,17 @@ extension LaunchDetailViewModel {
             let encodedLaunch = try NSKeyedArchiver.archivedData(withRootObject: launch.jsonObject, requiringSecureCoding: false)
             
             if var previousSavedLaunches = UserDefaults.standard.array(forKey: savedLaunchesDefaultsKey) as? [Data] {
+                // Removes any duplicates
+                previousSavedLaunches = try previousSavedLaunches.filter { data in
+                    let decodedLaunch = try decodedLaunch(for: data)
+                    
+                    if decodedLaunch?.id == launch.id {
+                        return false
+                    }
+                    
+                    return true
+                }
+                
                 previousSavedLaunches.append(encodedLaunch)
                 
                 UserDefaults.standard.set(previousSavedLaunches, forKey: savedLaunchesDefaultsKey)
