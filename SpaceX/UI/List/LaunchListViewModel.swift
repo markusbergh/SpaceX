@@ -87,7 +87,7 @@ class LaunchListViewModel: ObservableObject, LaunchListProvider {
                     }
                 } catch NetworkError.requestError {
                     DispatchQueue.main.async {
-                        self.state = .error(.requestError(message: "Something went wrong while fetching data."))
+                        self.state = .error(.requestError(message: "There was an error happening while fetching data."))
                     }
                 }
             }
